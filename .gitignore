@@ -1,0 +1,11 @@
+/.tags
+/.tags_sorted_by_file
+/.vagrant
+.crystal/
+coverage/
+/deps/
+/.build/
+.*.swp
+/Makefile.local
+all_spec
+
