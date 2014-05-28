@@ -4,7 +4,7 @@ require "spec"
 require "deque"
 
 describe "Deque" do
-  describe "(empty deque)" do
+  describe "(empty)" do
     it "should return nil when popping objects" do
       deque = Deque(Int32).new
       deque.pop_front.should be_nil
@@ -40,7 +40,7 @@ describe "Deque" do
     end
   end
 
-  describe "(non-empty deque)" do
+  describe "(non-empty)" do
     it "should return last pushed object with pop_back" do
       deque = Deque(Int32).new([1, 2, 3, 4])
       deque.pop_back.should eq(4)

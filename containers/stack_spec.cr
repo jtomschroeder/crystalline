@@ -4,7 +4,7 @@ require "spec"
 require "stack"
 
 describe "Stack" do
-  describe "empty stack" do
+  describe "(empty)" do
     it "should return nil when sent #pop" do
       stack = Stack(Int32).new
       stack.pop.should be_nil
@@ -27,7 +27,7 @@ describe "Stack" do
     end
   end
 
-  describe "non-empty stack" do
+  describe "(non-empty)" do
     it "should return last pushed object" do
       stack = Stack(Int32).new([1, 2, 3, 5, 8])
       stack.pop.should eq(8)

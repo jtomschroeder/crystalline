@@ -4,7 +4,7 @@ require "spec"
 require "queue"
 
 describe "Queue" do
-  describe "empty queue" do
+  describe "(empty)" do
     it "should return nil when sent #pop" do
       queue = Queue(Int32).new
       queue.pop.should be_nil
@@ -27,7 +27,7 @@ describe "Queue" do
     end
   end
 
-  describe "non-empty queue" do
+  describe "(non-empty)" do
     it "should return first pushed object" do
       queue = Queue(Int32).new([1, 2, 3, 5, 8])
       queue.pop.should eq(1)
