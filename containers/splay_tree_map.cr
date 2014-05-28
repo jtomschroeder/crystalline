@@ -3,33 +3,6 @@ require "stack"
 require "queue"
 
 class SplayTreeMap(K, V)
-  class Node
-    property :key
-    property :value
-    property :left
-    property :right
-
-    def initialize(@key : K, @value : V, @left : Node, @right : Node)
-    end
-  end
-
-  class NilNode < Node
-    def initialize
-    end
-
-    def nil?
-      true
-    end
-  end
-
-  def initialize
-    @NIL = NilNode.new
-
-    @root = @NIL
-    @size = 0
-    @header = Node.new(nil, nil, @NIL, @NIL)
-  end
-
   def push(key, value)
     if @root.nil?
       @root = Node.new(key, value, @NIL, @NIL)
@@ -150,8 +123,36 @@ class SplayTreeMap(K, V)
     end
   end
 
+  # private
+
+  class Node
+    property :key
+    property :value
+    property :left
+    property :right
+
+    def initialize(@key : K, @value : V, @left : Node, @right : Node)
+    end
+  end
+
+  class NilNode < Node
+    def initialize
+    end
+
+    def nil?
+      true
+    end
+  end
+
+  def initialize
+    @NIL = NilNode.new
+
+    @root = @NIL
+    @size = 0
+    @header = Node.new(nil, nil, @NIL, @NIL)
+  end
+
   # Moves key to the root, updating the structure in each step.
-  # - private method
   def splay(key : K)
     l, r = @header, @header
     t = @root as Node
@@ -192,7 +193,6 @@ class SplayTreeMap(K, V)
   end
 
   # Recursively determine height
-  # - private method
   def height_recursive(node)
     return 0 if node.nil?
 
