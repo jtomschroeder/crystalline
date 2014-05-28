@@ -26,6 +26,7 @@ class Deque(T)
 
   def initialize
     @NIL = NilNode.new
+
     @front = @back = @NIL
     @size = 0
   end
@@ -122,7 +123,7 @@ class Deque(T)
   def each
     node = @front
     until node.nil?
-      yield node.data
+      yield node.data as T
       node = node.next
     end
   end
@@ -130,10 +131,8 @@ class Deque(T)
   def reverse_each
     node = @back
     until node.nil?
-      yield node.data
+      yield node.data as T
       node = node.prev
     end
   end
 end
-
-$nil_node = Deque::NilNode.new
