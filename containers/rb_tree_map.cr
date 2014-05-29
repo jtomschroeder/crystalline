@@ -2,8 +2,6 @@
 require "stack"
 
 class RBTreeMap(K, V)
-  # attr_accessor :height_black
-
   def initialize
     @NIL = NilNode.new
 
@@ -13,7 +11,7 @@ class RBTreeMap(K, V)
 
   def push(key, value)
     @root = insert(@root, key, value)
-    @height_black += 1 if isred(@root)
+    @height_black += 1 if @root.red?
     @root.color = Color::BLACK
     value
   end
@@ -65,14 +63,10 @@ class RBTreeMap(K, V)
   end
 
   def delete(key)
-    # result = nil
     unless @root.nil?
       @root = delete_recursive(@root, key)
-      # pair = delete_recursive(@root, key)
-      # @root, result = pair.first, pair.second.key
       @root.color = Color::BLACK unless @root.nil?
     end
-    # result
   end
 
   def delete_min
@@ -135,9 +129,9 @@ class RBTreeMap(K, V)
     end
 
     def colorflip
-      @color       = @color == Color::RED       ? Color::BLACK : Color::RED
-      @left.color  = @left.color == Color::RED  ? Color::BLACK : Color::RED
-      @right.color = @right.color == Color::RED ? Color::BLACK : Color::RED
+      @color       = self.red?   ? Color::BLACK : Color::RED
+      @left.color  = @left.red?  ? Color::BLACK : Color::RED
+      @right.color = @right.red? ? Color::BLACK : Color::RED
     end
 
     def update_size
@@ -219,14 +213,14 @@ class RBTreeMap(K, V)
 
   def delete_recursive(node : Node, key : K)
     if (key <=> node.key) == -1
-      node.move_red_left if !isred(node.left) && !isred(node.left.left)
+      node.move_red_left if !node.left.red? && !node.left.left.red?
       node.left = delete_recursive(node.left, key)
     else
-      node.rotate_right if isred(node.left)
+      node.rotate_right if node.left.red?
       if ((key <=> node.key) == 0) && node.right.nil?
         return @NIL
       end
-      if !isred(node.right) && !isred(node.right.left)
+      if !node.right.red? && !node.right.left.red?
         node.move_red_right
       end
       if (key <=> node.key) == 0
@@ -244,7 +238,7 @@ class RBTreeMap(K, V)
     if node.left.nil?
       return @NIL
     end
-    if !isred(node.left) && !isred(node.left.left)
+    if !node.left.red? && !node.left.left.red?
       node.move_red_left
     end
     node.left = delete_min_recursive(node.left)
@@ -253,11 +247,11 @@ class RBTreeMap(K, V)
   end
 
   def delete_max_recursive(node)
-    if isred(node.left)
+    if node.left.red?
       node = node.rotate_right
     end
     return @NIL if node.right.nil?
-    if !isred(node.right) && !isred(node.right.left)
+    if !node.right.red? && !node.right.left.red?
       node.move_red_right
     end
     node.right = delete_max_recursive(node.right)
@@ -299,11 +293,5 @@ class RBTreeMap(K, V)
     node.rotate_right if (!node.left.nil? && node.left.red? && !node.left.left.nil? && node.left.left.red?)
     node.colorflip if (!node.left.nil? && node.left.red? && !node.right.nil? && node.right.red?)
     node.update_size
-  end
-
-  def isred(node : Node)
-    return false if node.nil?
-
-    node.color == Color::RED
   end
 end
