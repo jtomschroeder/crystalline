@@ -3,9 +3,7 @@ require "stack"
 
 class RBTreeMap(K, V)
   def initialize
-    @NIL = NilNode.new
-
-    @root = @NIL
+    @root = NIL
     @height_black = 0
   end
 
@@ -104,6 +102,8 @@ class RBTreeMap(K, V)
 
   # private
 
+  NIL = NilNode.new
+  
   module Color
     BLACK = 0
     RED = 1
@@ -118,7 +118,7 @@ class RBTreeMap(K, V)
     property :size
     property :height
 
-    def initialize(@key : V, @value : V, @left : Node, @right : Node)
+    def initialize(@key : V, @value : V, @left = RBTreeMap::NIL, @right = RBTreeMap::NIL)
       @color = Color::RED
       @size = 1
       @height = 1
@@ -218,7 +218,7 @@ class RBTreeMap(K, V)
     else
       node.rotate_right if node.left.red?
       if ((key <=> node.key) == 0) && node.right.nil?
-        return @NIL
+        return NIL
       end
       if !node.right.red? && !node.right.left.red?
         node.move_red_right
@@ -236,7 +236,7 @@ class RBTreeMap(K, V)
 
   def delete_min_recursive(node)
     if node.left.nil?
-      return @NIL
+      return NIL
     end
     if !node.left.red? && !node.left.left.red?
       node.move_red_left
@@ -250,7 +250,7 @@ class RBTreeMap(K, V)
     if node.left.red?
       node = node.rotate_right
     end
-    return @NIL if node.right.nil?
+    return NIL if node.right.nil?
     if !node.right.red? && !node.right.left.red?
       node.move_red_right
     end
@@ -281,7 +281,7 @@ class RBTreeMap(K, V)
   end
 
   def insert(node, key, value)
-    return Node.new(key, value, @NIL, @NIL) if node.nil?
+    return Node.new(key, value) if node.nil?
 
     case key <=> node.key
     when  0 then node.value = value

@@ -5,7 +5,7 @@ require "queue"
 class SplayTreeMap(K, V)
   def push(key, value)
     if @root.nil?
-      @root = Node.new(key, value, @NIL, @NIL)
+      @root = Node.new(key, value)
       @size = 1
       return value
     end
@@ -17,15 +17,15 @@ class SplayTreeMap(K, V)
       @root.value = value
       return value
     end
-    node = Node.new(key, value, @NIL, @NIL)
+    node = Node.new(key, value)
     if cmp < 1
       node.left = @root.left
       node.right = @root
-      @root.left = @NIL
+      @root.left = Node::NIL
     else
       node.right = @root.right
       node.left = @root
-      @root.right = @NIL
+      @root.right = Node::NIL
     end
     @root = node
     @size += 1
@@ -41,9 +41,9 @@ class SplayTreeMap(K, V)
   end
 
   def clear
-    @root = @NIL
+    @root = Node::NIL
     @size = 0
-    @header = Node.new(nil, nil, @NIL, @NIL)
+    @header = Node.new(nil, nil)
   end
 
   def height
@@ -87,7 +87,7 @@ class SplayTreeMap(K, V)
 
   def delete(key)
     return nil if @root.nil?
-    deleted = @NIL
+    deleted = Node::NIL
     splay(key)
     if (key <=> @root.key as K) == 0 # The key exists
       deleted = @root.value
@@ -131,7 +131,9 @@ class SplayTreeMap(K, V)
     property :left
     property :right
 
-    def initialize(@key : K, @value : V, @left : Node, @right : Node)
+    NIL = NilNode.new
+
+    def initialize(@key : K, @value : V, @left = NIL, @right = NIL)
     end
   end
 
@@ -145,18 +147,16 @@ class SplayTreeMap(K, V)
   end
 
   def initialize
-    @NIL = NilNode.new
-
-    @root = @NIL
+    @root = Node::NIL
     @size = 0
-    @header = Node.new(nil, nil, @NIL, @NIL)
+    @header = Node.new(nil, nil)
   end
 
   # Moves key to the root, updating the structure in each step.
   def splay(key : K)
     l, r = @header, @header
     t = @root as Node
-    @header.left, @header.right = @NIL, @NIL
+    @header.left, @header.right = Node::NIL, Node::NIL
 
     loop do
       if (key <=> t.key as K) == -1
