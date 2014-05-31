@@ -7,8 +7,8 @@ Containers:
 - [x] stack
 - [x] splay tree map
 - [x] red-black tree map
-- [ ] trie tree
-- [ ] suffix array
+- [x] trie tree
+- [x] suffix array
 - [ ] kd tree
 - [ ] heap
 - [ ] priority queue
@@ -27,4 +27,3 @@ Algorithms:
   - [ ] heapsort
   - [ ] comb sort
 - [ ] hashing
-- [ ] queue
