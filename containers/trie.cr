@@ -1,9 +1,14 @@
 
+macro alias_method(this, that)
+  def {{this.id}}(*args)
+    {{that.id}}(*args)
+  end
+end
+
 class Trie
-  NIL = NilNode.new
 
   def initialize
-    @root = NIL
+    @root = nil
   end
 
   def push(key : String, value : String)
@@ -11,17 +16,17 @@ class Trie
     @root = push_recursive(@root, key, 0, value)
     value
   end
-  # alias_method :[]=, :push
+  alias_method "[]=", "push"
 
   def has_key?(key : String)
     !get_recursive(@root, key, 0).nil?
   end
 
   def get(key : String)
-    node = get_recursive(@root, key, 0) as Node
-    node.nil? ? nil : node.value
+    node = get_recursive(@root, key, 0)
+    node.nil? ? nil : node.not_nil!.value
   end
-  # alias_method :[], :get
+  alias_method "[]", "get"
 
   def longest_prefix(string : String)
     string[0...prefix_recursive(@root, string, 0)]
@@ -32,7 +37,6 @@ class Trie
   end
 
   # private
-
   class Node
     property :char
     property :value
@@ -41,8 +45,8 @@ class Trie
     property :right
     property :end
 
-    def initialize(@char : UInt8, @value : String)
-      @left = @mid = @right = Trie::NIL
+    def initialize(@char : Char, @value : String)
+      @left = @mid = @right = nil
       @end = false
     end
 
@@ -51,41 +55,40 @@ class Trie
     end
   end
 
-  class NilNode < Node
-    def initialize
-    end
-
-    def nil?
-      true
-    end
-  end
-
-  def wildcard_recursive(node : Node, string, index, prefix)
+  private def wildcard_recursive(node : Node | Nil, string, index, prefix)
     return [] of String if node.nil? || index == string.length
 
+    node = node.not_nil!
     arr = [] of String
     char = string[index]
-    if (char.chr == '*' || char.chr == '.' || char < node.char)
+    node_char = node.char.not_nil!
+
+    if (char == '*' || char == '.' || char < node_char)
       arr.concat wildcard_recursive(node.left, string, index, prefix)
     end
-    if char.chr == '*' || char.chr == '.' || char > node.char
+    if char == '*' || char == '.' || char > node_char
       arr.concat wildcard_recursive(node.right, string, index, prefix)
     end
-    if (char.chr == '*' || char.chr == '.' || char == node.char)
-      arr << "#{prefix}#{node.char.chr}" if node.last?
-      arr.concat wildcard_recursive(node.mid, string, index + 1, prefix + node.char.chr.to_s)
+    if (char == '*' || char == '.' || char == node_char)
+      arr << "#{prefix}#{node.char}" if node.last?
+      arr.concat wildcard_recursive(node.mid, string, index + 1, prefix + node_char.to_s)
     end
+
     arr
   end
 
-  def prefix_recursive(node, string, index)
+  private def prefix_recursive(node : Node | Nil, string, index)
     return 0 if node.nil? || index == string.length
+    
+    node = node.not_nil!
     len = 0
     rec_len = 0
     char = string[index]
-    if (char < node.char)
+    node_char = node.char.not_nil!
+
+    if (char < node_char)
       rec_len = prefix_recursive(node.left, string, index)
-    elsif (char > node.char)
+    elsif (char > node_char)
       rec_len = prefix_recursive(node.right, string, index)
     else
       len = index + 1 if node.last?
@@ -94,12 +97,15 @@ class Trie
     len > rec_len ? len : rec_len
   end
 
-  def push_recursive(node, string, index, value)
+  private def push_recursive(node : Node | Nil, string, index, value)
     char = string[index]
     node = Node.new(char, value) if node.nil?
-    if (char < node.char)
+    node = node.not_nil!
+    node_char = node.char.not_nil!
+
+    if (char < node_char)
       node.left = push_recursive(node.left, string, index, value)
-    elsif (char > node.char)
+    elsif (char > node_char)
       node.right = push_recursive(node.right, string, index, value)
     elsif (index < string.length - 1)
       node.mid = push_recursive(node.mid, string, index + 1, value)
@@ -110,17 +116,21 @@ class Trie
     node
   end
 
-  def get_recursive(node : Node, string, index)
-    return Trie::NIL if node.nil?
+  private def get_recursive(node : Node | Nil, string, index)
+    return nil if node.nil?
+    
     char = string[index]
-    if (char < node.char as UInt8)
-      return get_recursive(node.left as Node, string, index)
-    elsif (char > node.char as UInt8)
-      return get_recursive(node.right as Node, string, index)
+    node = node.not_nil!
+    node_char = node.char.not_nil!
+
+    if (char < node_char)
+      return get_recursive(node.left, string, index)
+    elsif (char > node_char)
+      return get_recursive(node.right, string, index)
     elsif (index < string.length - 1)
-      return get_recursive(node.mid as Node, string, index + 1)
+      return get_recursive(node.mid, string, index + 1)
     else
-      return node.last? ? node : @NIL
+      return node.last? ? node : nil
     end
   end
 end
