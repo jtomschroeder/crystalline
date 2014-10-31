@@ -7,27 +7,12 @@ class Deque(T)
     property :prev
     property :data
 
-    def initialize(@data : T, @next : Node, @prev : Node)
-    end
-
-    def nil?
-      false
-    end
-  end
-
-  class NilNode < Node
-    def initialize
-    end
-
-    def nil?
-      true
+    def initialize(@data : T, @next : Node | Nil, @prev : Node | Nil)
     end
   end
 
   def initialize
-    @NIL = NilNode.new
-
-    @front = @back = @NIL
+    @front = @back = nil
     @size = 0
   end
 
@@ -42,7 +27,7 @@ class Deque(T)
   end
 
   def clear
-    @front = @back = @NIL
+    @front = @back = nil
     @size = 0
   end
 
@@ -55,19 +40,17 @@ class Deque(T)
   end
 
   def front
-    return @front.data unless @front.nil?
-    return nil
+    @front.nil? ? nil : @front.not_nil!.data
   end
 
   def back
-    return @back.data unless @back.nil?
-    return nil
+    @back.nil? ? nil : @back.not_nil!.data
   end
 
   def push_front(obj)
-    node = Node.new(obj, @NIL, @NIL)
+    node = Node.new(obj, nil, nil)
     unless @front.nil?
-      @front.next = node
+      @front.not_nil!.next = node
       node.prev = @front
       @front = node
     else
@@ -78,9 +61,9 @@ class Deque(T)
   end
 
   def push_back(obj)
-    node = Node.new(obj, @NIL, @NIL)
+    node = Node.new(obj, nil, nil)
     unless @back.nil?
-      @back.next = node
+      @back.not_nil!.next = node
       node.prev = @back
       @back = node
     else
@@ -92,30 +75,32 @@ class Deque(T)
 
   def pop_front
     return nil if @front.nil?
+    front = @front.not_nil!
     if @size == 1
-      data = @front.data
+      data = front.data
       clear
       return data
     else
       @size -= 1
-      data = @front.data
-      @front = @front.next
-      @front.prev = @NIL
+      data = front.data
+      @front = front.next
+      @front.not_nil!.prev = nil
       return data
     end
   end
 
   def pop_back
     return nil if @back.nil?
+    back = @back.not_nil!
     if @size == 1
-      data = @back.data
+      data = back.data
       clear
       return data
     else
       @size -= 1
-      data = @back.data
-      @back = @back.prev
-      @back.next = @NIL
+      data = back.data
+      @back = back.prev
+      @back.not_nil!.next = nil
       return data
     end
   end
@@ -123,6 +108,7 @@ class Deque(T)
   def each
     node = @front
     until node.nil?
+      node = node.not_nil!
       yield node.data as T
       node = node.next
     end
@@ -131,6 +117,7 @@ class Deque(T)
   def reverse_each
     node = @back
     until node.nil?
+      node = node.not_nil!
       yield node.data as T
       node = node.prev
     end
