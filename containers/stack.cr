@@ -27,7 +27,7 @@ class Stack(T)
   end
   
   def pop
-    @container.pop_back
+    @container.pop_back as (T | Nil)
   end
   
   def size

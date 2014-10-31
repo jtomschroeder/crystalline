@@ -91,5 +91,9 @@ describe "SplayTreeMap" do
       end
       count.should eq(100)
     end
+
+    it "should allow optional types (nil)" do
+      tree = SplayTreeMap(Int32, Int32 | Nil).new
+    end
   end
 end
