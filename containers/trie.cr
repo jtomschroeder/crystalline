@@ -51,43 +51,44 @@ class Trie
   end
 
   private def wildcard_recursive(node : Node | Nil, string, index, prefix)
-    return [] of String if node.nil? || index == string.length
+    return [] of String unless node && index != string.length
 
-    node = node.not_nil!
     arr = [] of String
-    char = string[index]
-    node_char = node.char
+    if node
+      char = string[index]
+      node_char = node.char
 
-    if (char == '*' || char == '.' || char < node_char)
-      arr.concat wildcard_recursive(node.left, string, index, prefix)
+      if (char == '*' || char == '.' || char < node_char)
+        arr.concat wildcard_recursive(node.left, string, index, prefix)
+      end
+      if char == '*' || char == '.' || char > node_char
+        arr.concat wildcard_recursive(node.right, string, index, prefix)
+      end
+      if (char == '*' || char == '.' || char == node_char)
+        arr << "#{prefix}#{node.char}" if node.last?
+        arr.concat wildcard_recursive(node.mid, string, index + 1, prefix + node_char.to_s)
+      end
     end
-    if char == '*' || char == '.' || char > node_char
-      arr.concat wildcard_recursive(node.right, string, index, prefix)
-    end
-    if (char == '*' || char == '.' || char == node_char)
-      arr << "#{prefix}#{node.char}" if node.last?
-      arr.concat wildcard_recursive(node.mid, string, index + 1, prefix + node_char.to_s)
-    end
-
     arr
   end
 
   private def prefix_recursive(node : Node | Nil, string, index)
-    return 0 if node.nil? || index == string.length
+    return 0 unless node && index != string.length
 
-    node = node.not_nil!
     len = 0
     rec_len = 0
-    char = string[index]
-    node_char = node.char
+    if node
+      char = string[index]
+      node_char = node.char
 
-    if (char < node_char)
-      rec_len = prefix_recursive(node.left, string, index)
-    elsif (char > node_char)
-      rec_len = prefix_recursive(node.right, string, index)
-    else
-      len = index + 1 if node.last?
-      rec_len = prefix_recursive(node.mid, string, index + 1)
+      if (char < node_char)
+        rec_len = prefix_recursive(node.left, string, index)
+      elsif (char > node_char)
+        rec_len = prefix_recursive(node.right, string, index)
+      else
+        len = index + 1 if node.last?
+        rec_len = prefix_recursive(node.mid, string, index + 1)
+      end
     end
     len > rec_len ? len : rec_len
   end

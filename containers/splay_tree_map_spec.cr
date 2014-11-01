@@ -82,6 +82,15 @@ describe "SplayTreeMap" do
       map.has_key?(0).should be_false
     end
 
+    it "should remove all keys" do
+      map = generate_splay(20)
+      20.times do |i|
+        map.has_key?(i).should be_true
+        map.delete(i).should eq(i * 2)
+        map.has_key?(i).should be_false
+      end
+    end
+
     it "should let you iterate with #each" do
       map = generate_splay(100)
       count = 0

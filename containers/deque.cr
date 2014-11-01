@@ -75,34 +75,34 @@ class Deque(T)
     front = @front
     return unless front
 
+    data = front.data
+
     if @size == 1
-      data = front.data
       clear
-      return data
     else
       @size -= 1
-      data = front.data
-      @front = front.next
-      @front.not_nil!.prev = nil
-      return data
+      if front = @front = front.next
+        front.prev = nil
+      end
     end
+    data
   end
 
   def pop_back
     back = @back
     return unless back
 
+    data = back.data
+    
     if @size == 1
-      data = back.data
       clear
-      return data
     else
       @size -= 1
-      data = back.data
-      @back = back.prev
-      @back.not_nil!.next = nil
-      return data
+      if back = @back = back.prev
+        back.next = nil
+      end
     end
+    data
   end
 
   def each

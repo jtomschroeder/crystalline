@@ -19,7 +19,7 @@ class SplayTreeMap(K, V)
   end
   
   def push(key, value)
-    if @root.nil?
+    unless @root
       @root = Node.new(key, value)
       @size = 1
       return value
@@ -27,23 +27,24 @@ class SplayTreeMap(K, V)
 
     splay(key)
 
-    root = @root.not_nil!
+    if root = @root
+      cmp = key <=> root.key
+      if cmp == 0
+        root.value = value
+        return value
+      end
+      node = Node.new(key, value)
+      if cmp < 1
+        node.left  = root.left
+        node.right = root
+        root.left  = nil
+      else
+        node.right = root.right
+        node.left  = root
+        root.right = nil
+      end
+    end
 
-    cmp = (key <=> root.key.not_nil!)
-    if cmp == 0
-      root.value = value
-      return value
-    end
-    node = Node.new(key, value)
-    if cmp < 1
-      node.left  = root.left
-      node.right = root
-      root.left  = nil
-    else
-      node.right = root.right
-      node.left  = root
-      root.right = nil
-    end
     @root = node
     @size += 1
     value
@@ -59,54 +60,57 @@ class SplayTreeMap(K, V)
   end
 
   def get(key : K)
-    return nil if @root.nil?
+    return unless @root
         
     splay(key)
-    root = @root.not_nil!
-    (root.key <=> key) == 0 ? root.value : nil
+    if root = @root
+      (root.key <=> key) == 0 ? root.value : nil
+    end
   end
-
-  def [](key : K)
-    get(key)
-  end
+  alias_method "[]", "get"
 
   def min
-    return nil if @root.nil?
+    return unless @root
+    
     n = @root
-    until n.not_nil!.left.nil?
-      n = n.not_nil!.left
+    while n && n.left
+      n = n.left
     end
-    n = n.not_nil!
-    splay(n.key)
-    return [n.key, n.value]
+
+    if n
+      splay(n.key)
+      [n.key, n.value]
+    end
   end
 
   def max
-    return nil if @root.nil?
+    return unless @root
+    
     n = @root
-    until n.not_nil!.right.nil?
-      n = n.not_nil!.right
+    while n && n.right
+      n = n.right
     end
-    n = n.not_nil!
-    splay(n.key)
-    return [n.key, n.value]
+
+    if n
+      splay(n.key)
+      [n.key, n.value]
+    end
   end
 
   def delete(key)
-    return nil if @root.nil?
     deleted = nil
-    splay(key)
-    root = @root.not_nil!
-    if (key <=> root.key) == 0 # The key exists
-      deleted = root.value
-      if root.left.nil?
-        @root = root.right
-      else
-        x = root.right
-        @root = root.left
-        splay(key)
-        root = @root.not_nil!
-        root.right = x
+    if root = @root
+      splay(key)
+      if (key <=> root.key) == 0 # The key exists
+        deleted = root.value
+        if root.left.nil?
+          @root = root.right
+        else
+          x = root.right
+          @root = root.left
+          splay(key)
+          root.right = x
+        end
       end
     end
     deleted
@@ -120,16 +124,16 @@ class SplayTreeMap(K, V)
     stack = Stack(Node).new
     cursor = @root
 
-    until cursor.nil?
-      cursor = cursor.not_nil!
+    while cursor
       stack.push(cursor)
       cursor = cursor.left
     end
 
     until stack.empty?
-      cursor = stack.pop.not_nil!
-      yield(cursor.key, cursor.value)
-      cursor = cursor.right
+      if cursor = stack.pop
+        yield(cursor.key, cursor.value)
+        cursor = cursor.right
+      end
     end
   end
 
@@ -155,54 +159,59 @@ class SplayTreeMap(K, V)
   # Moves key to the root, updating the structure in each step.
   private def splay(key : K)
     l, r = @header, @header
-    t = @root.not_nil!
+    t = @root
     @header.left, @header.right = nil, nil
 
     loop do
-      t = t.not_nil!
-      if (key <=> t.key.not_nil!) == -1
-        break if t.left.nil?
-        if (key <=> t.left.not_nil!.key.not_nil!) == -1
-          y = t.left.not_nil!
-          t.left = y.right
-          y.right = t
-          t = y
-          break if t.left.nil?
+      if t
+        if (key <=> t.key.not_nil!) == -1
+          break unless t.left
+          if (key <=> t.left.not_nil!.key.not_nil!) == -1
+            y = t.left.not_nil!
+            t.left = y.right
+            y.right = t
+            t = y
+            break unless t.left
+          end
+          r.left = t
+          r = t
+          t = t.left
+        elsif (key <=> t.key.not_nil!) == 1
+          break unless t.right
+          if (key <=> t.right.not_nil!.key.not_nil!) == 1
+            y = t.right.not_nil!
+            t.right = y.left
+            y.left = t
+            t = y
+            break unless t.right
+          end
+          l.right = t
+          l = t
+          t = t.right
+        else
+          break
         end
-        r.left = t
-        r = t
-        t = t.left.not_nil!
-      elsif (key <=> t.key.not_nil!) == 1
-        break if t.right.nil?
-        if (key <=> t.right.not_nil!.key.not_nil!) == 1
-          y = t.right.not_nil!
-          t.right = y.left
-          y.left = t
-          t = y
-          break if t.right.nil?
-        end
-        l.right = t
-        l = t
-        t = t.right
       else
         break
-	    end
+      end
     end
-    t = t.not_nil!
-    l.right, r.left = t.left, t.right
-    t.left, t.right = @header.right, @header.left
-    @root = t
+
+    if t
+      l.right, r.left = t.left, t.right
+      t.left, t.right = @header.right, @header.left
+      @root = t
+    end
   end
 
   # Recursively determine height
   private def height_recursive(node : Node | Nil)
-    return 0 if node.nil?
+    if node
+      left_height  = 1 + height_recursive(node.left)
+      right_height = 1 + height_recursive(node.right)
 
-    node = node.not_nil!
-
-    left_height  = 1 + height_recursive(node.left)
-    right_height = 1 + height_recursive(node.right)
-
-    left_height > right_height ? left_height : right_height
+      left_height > right_height ? left_height : right_height
+    else
+      0
+    end
   end
 end

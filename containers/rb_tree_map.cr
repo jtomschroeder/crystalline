@@ -232,7 +232,8 @@ class RBTreeMap(K, V)
               node.move_red_right
             end
             if (key <=> node_key) == 0
-              node.value = get_recursive(node_right, min_recursive(node_right).key.not_nil!)
+              rkey = min_recursive(node_right).key
+              node.value = get_recursive(node_right, rkey)
               node.key   = min_recursive(node_right).key
               node.right = delete_min_recursive(node_right)
             else
@@ -262,10 +263,7 @@ class RBTreeMap(K, V)
       node = node.rotate_right
     end
 
-    if node
-      node_right = node.right
-      return unless node_right
-
+    if node && (node_right = node.right)
       if !node_right.red? && !node_right.left.try &.red?
         node.move_red_right
       end
@@ -276,11 +274,12 @@ class RBTreeMap(K, V)
   end
 
   private def get_recursive(node, key : K)
-    return unless node
-    case key <=> node.key.not_nil!
-    when  0 then return node.value
-    when -1 then return get_recursive(node.left, key)
-    when  1 then return get_recursive(node.right, key)
+    if node && (node_key = node.key)
+      case key <=> node.key
+      when  0 then return node.value
+      when -1 then return get_recursive(node.left, key)
+      when  1 then return get_recursive(node.right, key)
+      end
     end
   end
 
