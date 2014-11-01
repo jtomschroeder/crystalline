@@ -19,8 +19,7 @@ class Trie
   end
 
   def get(key : String)
-    node = get_recursive(@root, key, 0)
-    node.nil? ? nil : node.not_nil!.value
+    get_recursive(@root, key, 0).try &.value
   end
   alias_method "[]", "get"
 
@@ -57,7 +56,7 @@ class Trie
     node = node.not_nil!
     arr = [] of String
     char = string[index]
-    node_char = node.char.not_nil!
+    node_char = node.char
 
     if (char == '*' || char == '.' || char < node_char)
       arr.concat wildcard_recursive(node.left, string, index, prefix)
@@ -75,12 +74,12 @@ class Trie
 
   private def prefix_recursive(node : Node | Nil, string, index)
     return 0 if node.nil? || index == string.length
-    
+
     node = node.not_nil!
     len = 0
     rec_len = 0
     char = string[index]
-    node_char = node.char.not_nil!
+    node_char = node.char
 
     if (char < node_char)
       rec_len = prefix_recursive(node.left, string, index)
@@ -95,9 +94,8 @@ class Trie
 
   private def push_recursive(node : Node | Nil, string, index, value)
     char = string[index]
-    node = Node.new(char, value) if node.nil?
-    node = node.not_nil!
-    node_char = node.char.not_nil!
+    node ||= Node.new(char, value)
+    node_char = node.char
 
     if (char < node_char)
       node.left = push_recursive(node.left, string, index, value)
@@ -114,11 +112,10 @@ class Trie
   end
 
   private def get_recursive(node : Node | Nil, string, index)
-    return nil if node.nil?
-    
+    return unless node
+
     char = string[index]
-    node = node.not_nil!
-    node_char = node.char.not_nil!
+    node_char = node.char
 
     if (char < node_char)
       return get_recursive(node.left, string, index)
