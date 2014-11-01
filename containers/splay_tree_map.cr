@@ -3,6 +3,21 @@ require "stack"
 require "queue"
 
 class SplayTreeMap(K, V)
+
+  def initialize
+    @root = nil
+    @size = 0
+    @header = Node.new(nil, nil)
+  end
+
+  getter size
+
+  def clear
+    @root = nil
+    @size = 0
+    @header = Node.new(nil, nil)
+  end
+  
   def push(key, value)
     if @root.nil?
       @root = Node.new(key, value)
@@ -23,30 +38,17 @@ class SplayTreeMap(K, V)
     if cmp < 1
       node.left  = root.left
       node.right = root
-      root.left  = Node::NIL
+      root.left  = nil
     else
       node.right = root.right
       node.left  = root
-      root.right = Node::NIL
+      root.right = nil
     end
     @root = node
     @size += 1
     value
   end
-
-  def []=(key : K, value : V)
-    push(key, value)
-  end
-
-  def size
-    @size
-  end
-
-  def clear
-    @root = Node::NIL
-    @size = 0
-    @header = Node.new(nil, nil)
-  end
+  alias_method "[]=", "push"
 
   def height
     height_recursive(@root)
@@ -92,7 +94,7 @@ class SplayTreeMap(K, V)
 
   def delete(key)
     return nil if @root.nil?
-    deleted = Node::NIL
+    deleted = nil
     splay(key)
     root = @root.not_nil!
     if (key <=> root.key) == 0 # The key exists
@@ -132,18 +134,16 @@ class SplayTreeMap(K, V)
   end
 
   # private
-
   class Node
     property :left
     property :right
 
-    NIL = NilNode.new
-
-    def initialize(@key : K, @value : V, @left = NIL, @right = NIL)
+    def initialize(@key : K, @value : V, @left = nil, @right = nil)
     end
 
     # Enforce type of node properties (key & value)
     macro node_prop(prop, type)
+      # TODO: "as {{type}}" instead of ".not_nil!"
       def {{prop}}; @{{prop}}.not_nil!; end
       def {{prop}}=(@{{prop}} : {{type}}); end
     end
@@ -152,26 +152,11 @@ class SplayTreeMap(K, V)
     node_prop value, V
   end
 
-  class NilNode < Node
-    def initialize
-    end
-
-    def nil?
-      true
-    end
-  end
-
-  def initialize
-    @root = Node::NIL
-    @size = 0
-    @header = Node.new(nil, nil)
-  end
-
   # Moves key to the root, updating the structure in each step.
-  def splay(key : K)
+  private def splay(key : K)
     l, r = @header, @header
     t = @root.not_nil!
-    @header.left, @header.right = Node::NIL, Node::NIL
+    @header.left, @header.right = nil, nil
 
     loop do
       t = t.not_nil!
@@ -210,7 +195,7 @@ class SplayTreeMap(K, V)
   end
 
   # Recursively determine height
-  def height_recursive(node : Node | Nil)
+  private def height_recursive(node : Node | Nil)
     return 0 if node.nil?
 
     node = node.not_nil!
