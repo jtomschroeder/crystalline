@@ -1,4 +1,6 @@
 
+require "common"
+
 class SuffixArray
   def initialize(string : String)
     raise("Suffix array cannot be initialized with an empty string.") if string.empty?
@@ -25,8 +27,6 @@ class SuffixArray
     end
     return false
   end
-
-  def [](substring)
-    has_substring?(substring)
-  end
+  alias_method "[]", "has_substring?"
+  
 end

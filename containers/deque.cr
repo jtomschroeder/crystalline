@@ -1,7 +1,10 @@
 
+require "common"
+
 class Deque(T)
   include Enumerable
 
+  # private
   class Node
     property :next
     property :prev
@@ -16,6 +19,9 @@ class Deque(T)
     @size = 0
   end
 
+  getter size
+  alias_method "length", "size"
+
   def self.new(ary : Array(T))
     deque = Deque(T).new
     ary.each { |e| deque.push_back(e) } unless ary.empty?
@@ -29,14 +35,6 @@ class Deque(T)
   def clear
     @front = @back = nil
     @size = 0
-  end
-
-  def size
-    @size
-  end
-
-  def length
-    @size
   end
 
   def front

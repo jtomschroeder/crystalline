@@ -1,6 +1,6 @@
 
-require "spec"
 require "deque"
+require "common"
 
 class Queue(T)
   include Enumerable
@@ -22,22 +22,14 @@ class Queue(T)
   def push(obj)
     @container.push_back(obj)
   end
-
-  def <<(obj)
-    push(obj)
-  end
+  alias_method "<<", "push"
 
   def pop
     @container.pop_front
   end
 
-  def size
-    @container.size
-  end
-
-  def empty?
-    @container.empty?
-  end
+  delegate size, @container
+  delegate empty?, @container
 
   def each
     @container.each { |e| yield e }

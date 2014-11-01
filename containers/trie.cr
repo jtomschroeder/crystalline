@@ -1,9 +1,5 @@
 
-macro alias_method(this, that)
-  def {{this.id}}(*args)
-    {{that.id}}(*args)
-  end
-end
+require "common"
 
 class Trie
 
@@ -113,6 +109,7 @@ class Trie
       node.end = true
       node.value = value
     end
+    
     node
   end
 

@@ -1,5 +1,6 @@
 
 require "deque"
+require "common"
 
 class Stack(T)
   include Enumerable
@@ -21,22 +22,14 @@ class Stack(T)
   def push(obj)
     @container.push_back(obj)
   end
-
-  def <<(obj)
-    push(obj)
-  end
+  alias_method "<<", "push"
   
   def pop
     @container.pop_back as (T | Nil)
   end
-  
-  def size
-    @container.size
-  end
-  
-  def empty?
-    @container.empty?
-  end
+
+  delegate size, @container
+  delegate empty?, @container
   
   def each
     @container.reverse_each { |e| yield e }
