@@ -6,12 +6,12 @@ class RBTreeMap(K, V)
   # include Enumerable
 
   def initialize
-    @root :: Node | Nil
+    @root :: Node?
     @root = nil
     @height_black = 0
   end
 
-  def push(key, value)
+  def push(key : K, value : V)
     @root = insert(@root, key, value)
     @height_black += 1 if isred(@root)
     if root = @root
@@ -29,18 +29,40 @@ class RBTreeMap(K, V)
     @root.try &.height || 0
   end
 
-  def has_key?(key)
+  def empty?
+    @root.nil?
+  end
+
+  def has_key?(key : K)
     !get(key).nil?
   end
 
-  def get(key)
+  def get(key : K)
     get_recursive(@root, key)
   end
   alias_method "[]", "get"
 
+  private def get_recursive(node : Node?, key : K)
+    if node
+      case key <=> node.key
+        when  0 then return node.value
+        when -1 then return get_recursive(node.left, key)
+        when  1 then return get_recursive(node.right, key)
+      end
+    end
+  end
+
   def min_key
     if root = @root
       min_recursive(root)
+    end
+  end
+
+  private def min_recursive(node : Node)
+    if node_left = node.left
+      min_recursive(node_left)
+    else
+      node.key
     end
   end
 
@@ -50,7 +72,15 @@ class RBTreeMap(K, V)
     end
   end
 
-  def delete(key)
+  private def max_recursive(node : Node)
+    if node_right = node.right
+      max_recursive(node_right)
+    else
+      node.key
+    end
+  end
+
+  def delete(key : K)
     result = nil
     if root = @root
       @root, result = delete_recursive(root, key)
@@ -61,30 +91,92 @@ class RBTreeMap(K, V)
     result
   end
 
-  def empty?
-    @root.nil?
+  private def delete_recursive(node : Node, key : K)
+    if (key <=> node.key) == -1
+      node.move_red_left if !isred(node.left) && !isred(node.left.try &.left)
+      if node_left = node.left
+        node.left, result = delete_recursive(node_left, key)
+      end
+    else
+      node.rotate_right if isred(node.left)
+      if !node.right && (key <=> node.key) == 0
+        return {nil, node.value}
+      end
+      if !isred(node.right) && !isred(node.right.try &.left)
+        node.move_red_right
+      end
+      if (key <=> node.key) == 0
+        result = node.value
+        if node_right = node.right
+          node.value = get_recursive(node_right, min_recursive(node_right))
+          node.key = min_recursive(node_right)
+          node.right = delete_min_recursive(node_right)[0]
+        end
+      else
+        if node_right = node.right
+          node.right, result = delete_recursive(node_right, key)
+        end
+      end
+    end
+    {node.fixup, result}
   end
 
   def delete_min
-    result = nil
     if root = @root
       @root, result = delete_min_recursive(root)
       if root = @root
         root.color = Color::BLACK
       end
+      result
     end
-    result
+  end
+
+  private def delete_min_recursive(node : Node)
+    if node_left = node.left
+      if !isred(node.left) && !isred(node.left.try &.left)
+        node.move_red_left
+      end
+
+      if node_left = node.left
+        node.left, result = delete_min_recursive(node_left)
+      end
+
+      {node.fixup, result}
+    else
+      {nil, node.value}
+    end
   end
 
   def delete_max
-    result = nil
     if root = @root
       @root, result = delete_max_recursive(root)
       if root = @root
         root.color = Color::BLACK
       end
+      result
     end
-    result
+  end
+
+  private def delete_max_recursive(node : Node)
+    if isred(node.left)
+      node = node.rotate_right
+    end
+    if node
+      if node_right = node.right
+        if !isred(node_right) && !isred(node_right.left)
+          node.move_red_right
+        end
+
+        if node_right = node.right
+          node.right, result = delete_max_recursive(node_right)
+        end
+
+        return {node.fixup, result}
+      else
+        return {nil, node.value}
+      end
+    end
+    {nil, nil} # FIXME: should be unreachable
   end
 
   def each
@@ -107,20 +199,11 @@ class RBTreeMap(K, V)
     end
   end
 
-  def to_s
-    s = "{ "
-    each do |k, v| 
-      s += "#{k} : #{v}"
-      s += ", " if k != max_key
+  # DEBUG
+  def print_levels
+    if root = @root
+      root.print_levels
     end
-    s += " }"
-    s
-  end
-
-  def keys
-    ks = [] of K
-    each { |k, v| ks << k }
-    ks
   end
 
   # private
@@ -132,16 +215,19 @@ class RBTreeMap(K, V)
   # private
   class Node
     property :color, :key, :value, :left, :right, :size, :height
-    def initialize(@key, @value)
+    def initialize(@key : K, @value : V)
       @color = Color::RED
 
-      @left :: Node | Nil
+      @left :: Node?
       @left = nil
 
-      @right :: Node | Nil
+      @right :: Node?
       @right = nil
 
+      @size :: Int32
       @size = 1
+
+      @height :: Int32
       @height = 1
     end
 
@@ -184,6 +270,7 @@ class RBTreeMap(K, V)
         r.update_size
         update_size
       end
+      self
     end
 
     def rotate_right
@@ -199,6 +286,7 @@ class RBTreeMap(K, V)
         l.update_size
         update_size
       end
+      self
     end
 
     def move_red_left
@@ -229,97 +317,29 @@ class RBTreeMap(K, V)
 
       update_size
     end
-  end
 
-  private def delete_recursive(node : Node, key)
-    if (key <=> node.key) == -1
-      node.move_red_left if !isred(node.left) && !isred(node.left.try &.left)
-      if node_left = node.left
-        node.left, result = delete_recursive(node_left, key)
-      end
-    else
-      node.rotate_right if isred(node.left)
-      if !node.right && (key <=> node.key) == 0
-        return {nil, node.value}
-      end
-      if !isred(node.right) && !isred(node.right.not_nil!.left)
-        node.move_red_right
-      end
-      if (key <=> node.key) == 0
-        result = node.value
-        if node_right = node.right
-          node.value = get_recursive(node_right, min_recursive(node_right))
-          node.key = min_recursive(node_right)
-          node.right = delete_min_recursive(node_right)[0]
+    # DEBUG
+    def print_levels(n = [self], level = 0)
+      nxt = [] of Node?
+      n.each do |node|
+        print(" " * (2 ** (height - level)))
+        if node
+          print "#{node.key}"
+          nxt << node.left
+          nxt << node.right
+        else
+          print "*"
         end
-      else
-        if node_right = node.right
-          node.right, result = delete_recursive(node_right, key)
-        end
+        print(" " * ((2 ** (height - level)) - 1))
       end
-    end
-    {node.fixup, result}
-  end
-
-  private def delete_min_recursive(node : Node)
-    if node_left = node.left
-      if !isred(node.left) && !isred(node.left.not_nil!.left)
-        node.move_red_left
-      end
-      node.left, result = delete_min_recursive(node_left)
-
-      {node.fixup, result}
-    else
-      {nil, node.value}
-    end
-  end
-
-  private def delete_max_recursive(node : Node)
-    if isred(node.left)
-      node = node.rotate_right
-    end
-    if node
-      if node_right = node.right
-        if ( !isred(node_right) && !isred(node_right.left) )
-          node.move_red_right
-        end
-        node.right, result = delete_max_recursive(node_right)
-
-        return {node.fixup, result}
-      else
-        return {nil, node.value}
-      end
-    end
-    {nil, nil} # FIXME: should be unreachable
-  end
-
-  private def get_recursive(node, key)
-    if node
-      case key <=> node.key
-        when  0 then return node.value
-        when -1 then return get_recursive(node.left, key)
-        when  1 then return get_recursive(node.right, key)
+      puts
+      unless level == height - 1
+        print_levels nxt, level + 1
       end
     end
   end
 
-  private def min_recursive(node : Node)
-    if node_left = node.left
-      min_recursive(node_left)
-    else
-      node.key
-    end
-  end
-
-  private def max_recursive(node : Node)
-    if node_right = node.right
-      max_recursive(node_right)
-    else
-      node.key
-    end
-  end
-
-  private def insert(node : Node?, key, value)
+  private def insert(node : Node?, key : K, value : V)
     if node
       case key <=> node.key
         when  0 then node.value = value
@@ -336,7 +356,7 @@ class RBTreeMap(K, V)
     end
   end
 
-  private def isred(node)
+  private def isred(node : Node?)
     if node
       node.color == Color::RED
     else
