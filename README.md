@@ -1,7 +1,7 @@
 crystalline
 ===========
 
-`crystalline` is a collection of containers & algorithms for the `crystal` programming language.
+`crystalline` is a collection of containers & algorithms for the `[crystal](https://github.com/manastech/crystal)` programming language.
 
 - Containers
   - Deque
