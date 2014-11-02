@@ -1,6 +1,6 @@
 
 require "spec"
-require "trie"
+require "../containers/trie"
 
 describe "Trie" do
   describe "(empty)" do

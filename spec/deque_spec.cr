@@ -1,7 +1,7 @@
 #!/usr/bin/env bin/crystal --run
 
 require "spec"
-require "deque"
+require "../containers/deque"
 
 describe "Deque" do
   describe "(empty)" do

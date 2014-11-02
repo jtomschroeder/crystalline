@@ -55,6 +55,18 @@ class SplayTreeMap(K, V)
     height_recursive(@root)
   end
 
+  # Recursively determine height
+  private def height_recursive(node : Node?)
+    if node
+      left_height  = 1 + height_recursive(node.left)
+      right_height = 1 + height_recursive(node.right)
+
+      left_height > right_height ? left_height : right_height
+    else
+      0
+    end
+  end
+
   def has_key?(key)
     !get(key).nil?
   end
@@ -203,15 +215,4 @@ class SplayTreeMap(K, V)
     end
   end
 
-  # Recursively determine height
-  private def height_recursive(node : Node | Nil)
-    if node
-      left_height  = 1 + height_recursive(node.left)
-      right_height = 1 + height_recursive(node.right)
-
-      left_height > right_height ? left_height : right_height
-    else
-      0
-    end
-  end
 end

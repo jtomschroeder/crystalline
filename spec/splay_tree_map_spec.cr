@@ -1,7 +1,7 @@
 #!/usr/bin/env bin/crystal --run
 
 require "spec"
-require "splay_tree_map"
+require "../containers/splay_tree_map"
 
 describe "SplayTreeMap" do
   describe "(empty)" do

@@ -25,7 +25,7 @@ class Stack(T)
   alias_method "<<", "push"
   
   def pop
-    @container.pop_back as (T | Nil)
+    @container.pop_back as T?
   end
 
   delegate size, @container

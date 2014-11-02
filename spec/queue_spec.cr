@@ -1,7 +1,7 @@
 #!/usr/bin/env bin/crystal --run
 
 require "spec"
-require "queue"
+require "../containers/queue"
 
 describe "Queue" do
   describe "(empty)" do

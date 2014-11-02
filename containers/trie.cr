@@ -4,15 +4,35 @@ require "common"
 class Trie
 
   def initialize
+    @root :: Node?
     @root = nil
   end
 
   def push(key : String, value : String)
-    return nil if key.empty?
+    return if key.empty?
     @root = push_recursive(@root, key, 0, value)
     value
   end
   alias_method "[]=", "push"
+
+  private def push_recursive(node : Node?, string, index, value)
+    char = string[index]
+    node ||= Node.new(char, value)
+    node_char = node.char
+
+    if (char < node_char)
+      node.left = push_recursive(node.left, string, index, value)
+    elsif (char > node_char)
+      node.right = push_recursive(node.right, string, index, value)
+    elsif (index < string.length - 1)
+      node.mid = push_recursive(node.mid, string, index + 1, value)
+    else
+      node.end = true
+      node.value = value
+    end
+    
+    node
+  end
 
   def has_key?(key : String)
     !get_recursive(@root, key, 0).nil?
@@ -23,34 +43,53 @@ class Trie
   end
   alias_method "[]", "get"
 
+  private def get_recursive(node : Node?, string, index)
+    return unless node
+
+    char = string[index]
+    node_char = node.char
+
+    if (char < node_char)
+      return get_recursive(node.left, string, index)
+    elsif (char > node_char)
+      return get_recursive(node.right, string, index)
+    elsif (index < string.length - 1)
+      return get_recursive(node.mid, string, index + 1)
+    else
+      return node.last? ? node : nil
+    end
+  end
+
   def longest_prefix(string : String)
     string[0...prefix_recursive(@root, string, 0)]
   end
 
+  private def prefix_recursive(node : Node?, string, index)
+    return 0 unless node && index != string.length
+
+    len = 0
+    rec_len = 0
+    if node
+      char = string[index]
+      node_char = node.char
+
+      if (char < node_char)
+        rec_len = prefix_recursive(node.left, string, index)
+      elsif (char > node_char)
+        rec_len = prefix_recursive(node.right, string, index)
+      else
+        len = index + 1 if node.last?
+        rec_len = prefix_recursive(node.mid, string, index + 1)
+      end
+    end
+    len > rec_len ? len : rec_len
+  end
+
   def wildcard(string : String)
-    return wildcard_recursive(@root, string, 0, "").sort
+    wildcard_recursive(@root, string, 0, "").sort
   end
 
-  # private
-  class Node
-    property :char
-    property :value
-    property :left
-    property :mid
-    property :right
-    property :end
-
-    def initialize(@char : Char, @value : String)
-      @left = @mid = @right = nil
-      @end = false
-    end
-
-    def last?
-      @end == true
-    end
-  end
-
-  private def wildcard_recursive(node : Node | Nil, string, index, prefix)
+  private def wildcard_recursive(node : Node?, string, index, prefix)
     return [] of String unless node && index != string.length
 
     arr = [] of String
@@ -72,60 +111,23 @@ class Trie
     arr
   end
 
-  private def prefix_recursive(node : Node | Nil, string, index)
-    return 0 unless node && index != string.length
+  # private
+  class Node
+    property :char
+    property :value
+    property :left
+    property :mid
+    property :right
+    property :end
 
-    len = 0
-    rec_len = 0
-    if node
-      char = string[index]
-      node_char = node.char
-
-      if (char < node_char)
-        rec_len = prefix_recursive(node.left, string, index)
-      elsif (char > node_char)
-        rec_len = prefix_recursive(node.right, string, index)
-      else
-        len = index + 1 if node.last?
-        rec_len = prefix_recursive(node.mid, string, index + 1)
-      end
+    def initialize(@char : Char, @value : String)
+      @left = @mid = @right = nil
+      @end = false
     end
-    len > rec_len ? len : rec_len
-  end
 
-  private def push_recursive(node : Node | Nil, string, index, value)
-    char = string[index]
-    node ||= Node.new(char, value)
-    node_char = node.char
-
-    if (char < node_char)
-      node.left = push_recursive(node.left, string, index, value)
-    elsif (char > node_char)
-      node.right = push_recursive(node.right, string, index, value)
-    elsif (index < string.length - 1)
-      node.mid = push_recursive(node.mid, string, index + 1, value)
-    else
-      node.end = true
-      node.value = value
-    end
-    
-    node
-  end
-
-  private def get_recursive(node : Node | Nil, string, index)
-    return unless node
-
-    char = string[index]
-    node_char = node.char
-
-    if (char < node_char)
-      return get_recursive(node.left, string, index)
-    elsif (char > node_char)
-      return get_recursive(node.right, string, index)
-    elsif (index < string.length - 1)
-      return get_recursive(node.mid, string, index + 1)
-    else
-      return node.last? ? node : nil
+    def last?
+      @end == true
     end
   end
+
 end

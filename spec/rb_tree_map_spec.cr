@@ -1,6 +1,6 @@
 
 require "spec"
-require "rb_tree_map"
+require "../containers/rb_tree_map"
 
 describe "RBTreeMap" do
   describe "(empty)" do

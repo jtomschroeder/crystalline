@@ -1,7 +1,7 @@
 #!/usr/bin/env bin/crystal --run
 
 require "spec"
-require "stack"
+require "../containers/stack"
 
 describe "Stack" do
   describe "(empty)" do

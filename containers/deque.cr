@@ -10,7 +10,7 @@ class Deque(T)
     property :prev
     property :data
 
-    def initialize(@data : T, @next : Node | Nil, @prev : Node | Nil)
+    def initialize(@data : T, @next : Node?, @prev : Node?)
     end
   end
 
@@ -120,4 +120,5 @@ class Deque(T)
       node = node.prev
     end
   end
+
 end

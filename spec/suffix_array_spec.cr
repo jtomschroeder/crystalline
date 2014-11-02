@@ -1,6 +1,6 @@
 
 require "spec"
-require "suffix_array"
+require "../containers/suffix_array"
 
 describe "SuffixArray" do
   it "should not initialize with empty string" do
