@@ -27,8 +27,6 @@ describe "RBTreeMap" do
 
     it "should return nil for max and min" do
       tree = RBTreeMap(Int32, Int32).new
-      tree.min_value.should be_nil
-      tree.max_value.should be_nil
       tree.min_key.should be_nil
       tree.max_key.should be_nil
     end
@@ -42,7 +40,7 @@ describe "RBTreeMap" do
   describe "(non-empty)" do
     def setup_tree()
       tree = RBTreeMap(Int32, Int32).new
-      num_items = 1000
+      num_items = 25
       random_array = Array.new(num_items) { rand(num_items) }
       random_array.each { |x| tree[x] = x * 2 }
       {tree, random_array}
@@ -60,8 +58,6 @@ describe "RBTreeMap" do
 
       tree.min_key.should eq(random_array.min)
       tree.max_key.should eq(random_array.max)
-      tree.min_value.should eq(random_array.min * 2)
-      tree.max_value.should eq(random_array.max * 2)
     end
 
     it "should not #has_key? keys it doesn't have" do
@@ -78,7 +74,6 @@ describe "RBTreeMap" do
 
     it "should remove all keys" do
       tree, random_array = setup_tree()
-
       random_array.uniq!.each do |key|
         tree.has_key?(key).should eq(true)
         tree.delete(key)
@@ -90,7 +85,6 @@ describe "RBTreeMap" do
     it "should delete_min keys correctly" do
       tree, random_array = setup_tree()
 
-      # random_array.uniq!.sort!.reverse! # TODO: figure out why this intermittently crashes (due to Array#reverse!)
       random_array = random_array.uniq!.sort!.reverse
       until tree.empty?
         key = random_array.pop
