@@ -11,9 +11,10 @@ crystalline
   - Splay Trees
   - Tries
   - Suffix Array
-  - Heaps __NYI__
-  - Priority Queue __NYI__
-- Algorithms __NYI__
+  - _k_-d Trees
+  - Heaps __(NYI)__
+  - Priority Queue __(NYI)__
+- Algorithms __(NYI)__
 
 #### Credits
 - https://github.com/kanwei/algorithms
