@@ -17,4 +17,6 @@ crystalline
 - Algorithms __(NYI)__
 
 #### Credits
-- https://github.com/kanwei/algorithms
+- Inspired by https://github.com/kanwei/algorithms
+
+crystalline is Copyright (c) 2014 Tom Schroeder and released under the MIT license
