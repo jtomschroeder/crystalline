@@ -9,7 +9,7 @@ Containers:
 - [x] red-black tree map
 - [x] trie tree
 - [x] suffix array
-- [ ] kd tree
+- [x] kd tree
 - [ ] heap
 - [ ] priority queue
 - [ ] graph
