@@ -7,14 +7,13 @@ crystalline
   - Deque
   - Stack
   - Queue
-  - Red-Black Trees
-  - Splay Trees
-  - Tries
+  - Red-Black Tree
+  - Splay Tree
+  - Trie
   - Suffix Array
-  - _k_-d Trees
-  - Heaps __(NYI)__
-  - Priority Queue __(NYI)__
-- Algorithms __(NYI)__
+  - _k_-d Tree
+
+Pull requests welcome! :)
 
 #### Credits
 - Inspired by https://github.com/kanwei/algorithms
