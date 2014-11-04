@@ -18,4 +18,4 @@ Pull requests welcome! :)
 #### Credits
 - Inspired by https://github.com/kanwei/algorithms
 
-`crystalline`: Copyright (c) 2014 Tom Schroeder, released under the MIT license
+`crystalline` Copyright (c) 2014 Tom Schroeder, released under the MIT license
