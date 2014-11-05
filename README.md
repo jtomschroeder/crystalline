@@ -14,7 +14,7 @@ crystalline
   - _k_-d Tree
 - Graphs
 
-Pull requests welcome! :)
+Pull requests are welcome! :)
 
 #### Credits
 - [kanwei's Algorithms](https://github.com/kanwei/algorithms)
