@@ -14,4 +14,6 @@ class Array(T)
     end
     size <=> other.size
   end
+
+  alias_method "add", "push"
 end

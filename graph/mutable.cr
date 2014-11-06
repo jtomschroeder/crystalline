@@ -12,11 +12,11 @@ module MutableGraph(T, Edge)
     raise NotImplementedError.new
   end
 
-  def add_vertices(*a)
+  def add_vertices(a)
     a.each { |v| add_vertex v }
   end
 
-  def add_edges(*edges)
+  def add_edges(edges)
     edges.each { |edge| add_edge(edge[0], edge[1]) }
   end
 
@@ -28,7 +28,7 @@ module MutableGraph(T, Edge)
     raise NotImplementedError.new
   end
 
-  def remove_vertices(*a)
+  def remove_vertices(a)
     a.each { |v| remove_vertex v }
   end
 

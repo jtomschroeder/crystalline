@@ -83,13 +83,13 @@ describe "UndirectedAdjacencyGraph" do
 
   it "add_vertices" do
     dg = AdjacencyGraph(Int32, Set).new
-    dg.add_vertices 1, 3, 2, 4
+    dg.add_vertices [1, 3, 2, 4]
     dg.vertices.sort.should eq [1, 2, 3, 4]
 
-    dg.remove_vertices 1, 3
+    dg.remove_vertices [1, 3]
     dg.vertices.sort.should eq [2, 4]
 
-    dg.remove_vertices 1, 3
+    dg.remove_vertices [1, 3]
     dg.vertices.sort.should eq [2, 4]
   end
 

@@ -111,13 +111,20 @@ module Graph(T, Edge)
 
   def num_edges
     r = 0
-    each_edge { |u, v| r +=1 }
+    each_edge { |u, v| r += 1 }
     r
   end
 
-  def to_s
-    edges.sort.to_s
+  delegate to_s, edges.sort
+
+  def eql?(g)
+    same?(g) || 
+      g.is_a?(Graph) && directed? == g.directed? && 
+      g.inject(0) { |n, v| has_vertex?(v) || return false; n + 1 } == num_vertices && 
+      g.each_edge { |u, v| has_edge?(u, v) || return false } && 
+      num_edges == g.num_edges
   end
+  alias_method "==", "eql?"
 
   private def each_edge_aux
     visited = {} of UndirectedEdge(T) => Bool

@@ -6,8 +6,13 @@ require "mutable"
 class DirectedAdjacencyGraph(T, EdgeList)
   include MutableGraph(T, DirectedEdge)
 
-  def initialize
+  def initialize(*other_graphs)
     @vertice_dict = {} of T => EdgeList(T)
+
+    other_graphs.each do |g|
+      g.each_vertex {|v| add_vertex v}
+      g.each_edge {|v,w| add_edge v,w}
+    end
   end
 
   def each_vertex
@@ -62,8 +67,13 @@ end
 class AdjacencyGraph(T, EdgeList)
   include MutableGraph(T, UndirectedEdge)
 
-  def initialize
+  def initialize(*other_graphs)
     @vertice_dict = {} of T => EdgeList(T)
+    
+    other_graphs.each do |g|
+      g.each_vertex {|v| add_vertex v}
+      g.each_edge {|v,w| add_edge v,w}
+    end
   end
 
   def each_vertex
@@ -120,6 +130,13 @@ class AdjacencyGraph(T, EdgeList)
 end
 
 module Graph(T, Edge)
+
+  def to_adjacency
+    result = directed? ? DirectedAdjacencyGraph(T, Set).new : AdjacencyGraph(T, Set).new
+    each_vertex { |v| result.add_vertex(v) }
+    each_edge { |u,v| result.add_edge(u, v) }
+    result
+  end
 
   def reverse
     return self unless directed?
