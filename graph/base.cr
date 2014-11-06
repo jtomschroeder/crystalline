@@ -5,28 +5,28 @@ class NotImplementedError < Exception; end
 class NoVertexError < Exception; end
 
 module Edge(T)
+  include Comparable(Edge)
+
   property :source, :target
 
   def eql?(edge)
-    source == edge.source && target == edge.target
+    @source == edge.source && @target == edge.target
   end
   alias_method "==", "eql?"
 
   def reverse
-    self.class.new(target, source)
+    self.class.new(@target, @source)
   end
 
-  def [](index); index == 0 ? source : target; end
+  def [](index); index == 0 ? @source : @target; end
 
   def to_s
-    "(#{source}-#{target})"
+    "(#{@source}-#{@target})"
   end
 
-  def to_a; [source, target]; end
+  def to_a; [@source, @target]; end
 
-  def <=> e
-    self.to_a <=> e.to_a
-  end
+  def <=>(e); self.to_a <=> e.to_a; end
 end
 
 class DirectedEdge(T)
@@ -41,14 +41,14 @@ class UndirectedEdge(T)
   def initialize(@source : T, @target : T); end
 
   def eql?(edge)
-    super || (target == edge.source && source == edge.target)
+    super || (@target == edge.source && @source == edge.target)
   end
 
   def hash
-    source.hash ^ target.hash
+    @source.hash ^ @target.hash
   end
 
-  def to_s; "(#{source}=#{target})"; end
+  def to_s; "(#{@source}=#{@target})"; end
 end
 
 module Graph(T, Edge)
