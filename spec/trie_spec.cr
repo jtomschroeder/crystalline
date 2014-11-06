@@ -2,6 +2,15 @@
 require "spec"
 require "../containers/trie"
 
+def setup_trie
+  trie = Trie.new
+  trie.push("Hello", "World")
+  trie.push("Hilly", "World")
+  trie.push("Hello, brother", "World")
+  trie.push("Hello, bob", "World")
+  trie
+end
+    
 describe "Trie" do
   describe "(empty)" do
     it "should not get or has_key?" do
@@ -26,14 +35,6 @@ describe "Trie" do
   end
 
   describe "(non-empty)" do
-    def setup_trie
-      trie = Trie.new
-      trie.push("Hello", "World")
-      trie.push("Hilly", "World")
-      trie.push("Hello, brother", "World")
-      trie.push("Hello, bob", "World")
-      trie
-    end
 
     it "should has_key? keys it has" do
       trie = setup_trie()

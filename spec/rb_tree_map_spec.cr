@@ -2,6 +2,14 @@
 require "spec"
 require "../containers/rb_tree_map"
 
+def setup_tree()
+  tree = RBTreeMap(Int32, Int32).new
+  num_items = 25
+  random_array = Array.new(num_items) { rand(num_items) }
+  random_array.each { |x| tree[x] = x * 2 }
+  {tree, random_array}
+end
+    
 describe "RBTreeMap" do
   describe "(empty)" do
     it "should let you push stuff in" do
@@ -38,13 +46,6 @@ describe "RBTreeMap" do
   end
 
   describe "(non-empty)" do
-    def setup_tree()
-      tree = RBTreeMap(Int32, Int32).new
-      num_items = 25
-      random_array = Array.new(num_items) { rand(num_items) }
-      random_array.each { |x| tree[x] = x * 2 }
-      {tree, random_array}
-    end
 
     it "should return correct size (uniqify items first)" do
       tree, random_array = setup_tree()

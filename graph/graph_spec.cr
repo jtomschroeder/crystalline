@@ -3,26 +3,30 @@ require "spec"
 require "adjacency"
 require "set"
 
+def setup
+  edges = [{1, 2}, {2, 3}, {2, 4}, {4, 5}, {1, 6}, {6, 4}]    
+  loan_vertices = [7, 8, 9]
+
+  dg1 = DirectedAdjacencyGraph(Int32, Set).new
+  edges.each { |e| dg1.add_edge(e[0], e[1]) }
+  loan_vertices.each { |v| dg1.add_vertex(v) }
+
+  dg2 = DirectedAdjacencyGraph(Int32, Set).new
+  edges.each { |e| dg2.add_edge(e[0], e[1]) }
+  loan_vertices.each { |v| dg2.add_vertex(v) }
+
+  ug = AdjacencyGraph(Int32, Array).new
+  ug.add_edges(edges)
+  ug.add_vertices(loan_vertices)
+
+  {dg1, dg2, ug}
+end
+
+class NotImplementedGraph
+  include Graph(Int32, DirectedEdge)
+end
+
 describe "Graph" do
-
-  def setup
-    edges = [{1, 2}, {2, 3}, {2, 4}, {4, 5}, {1, 6}, {6, 4}]    
-    loan_vertices = [7, 8, 9]
-
-    dg1 = DirectedAdjacencyGraph(Int32, Set).new
-    edges.each { |e| dg1.add_edge(e[0], e[1]) }
-    loan_vertices.each { |v| dg1.add_vertex(v) }
-
-    dg2 = DirectedAdjacencyGraph(Int32, Set).new
-    edges.each { |e| dg2.add_edge(e[0], e[1]) }
-    loan_vertices.each { |v| dg2.add_vertex(v) }
-
-    ug = AdjacencyGraph(Int32, Array).new
-    ug.add_edges(edges)
-    ug.add_vertices(loan_vertices)
-
-    {dg1, dg2, ug}
-  end
 
   it "equality" do
     dg1, dg2, ug = setup()
@@ -48,10 +52,6 @@ describe "Graph" do
     merge = DirectedAdjacencyGraph(Int32, Set).new(dg1, dg1)
     merge.num_edges.should eq 6
     merge.num_vertices.should eq 9
-  end
-
-  class NotImplementedGraph
-    include Graph(Int32, DirectedEdge)
   end
 
   it "not_implemented" do

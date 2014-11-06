@@ -1,7 +1,12 @@
-#!/usr/bin/env bin/crystal --run
 
 require "spec"
 require "../containers/splay_tree_map"
+
+def generate_splay(num_items : Int32)
+  map = SplayTreeMap(Int32, Int32).new
+  num_items.times { |i| map[i] = i * 2 }
+  map
+end
 
 describe "SplayTreeMap" do
   describe "(empty)" do
@@ -34,11 +39,6 @@ describe "SplayTreeMap" do
   end
 
   describe "(non-empty)" do
-    def generate_splay(num_items : Int32)
-      map = SplayTreeMap(Int32, Int32).new
-      num_items.times { |i| map[i] = i * 2 }
-      map
-    end
 
     it "should return correct size (unique items)" do
       map = generate_splay(100)

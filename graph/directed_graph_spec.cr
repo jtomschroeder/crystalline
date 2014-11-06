@@ -3,6 +3,12 @@ require "spec"
 require "adjacency"
 require "set"
 
+def setup()
+  dg = DirectedAdjacencyGraph(Int32, Set).new
+  [{1, 2}, {2, 3}, {3, 2}, {2, 4}].each { |i| dg.add_edge(i[0], i[1]) }
+  dg
+end
+
 describe "DirectedAdjacencyGraph" do
 
   it "empty_graph" do
@@ -40,12 +46,6 @@ describe "DirectedAdjacencyGraph" do
     
     dg.out_degree(1).should eq 1
     dg.out_degree(2).should eq 0
-  end
-
-  def setup()
-    dg = DirectedAdjacencyGraph(Int32, Set).new
-    [{1, 2}, {2, 3}, {3, 2}, {2, 4}].each { |i| dg.add_edge(i[0], i[1]) }
-    dg
   end
 
   it "edges" do
