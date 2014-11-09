@@ -17,3 +17,11 @@ class Array(T)
 
   alias_method "add", "push"
 end
+
+class Hash(K, V)
+  alias_method "size", "length"
+end
+
+module Enumerable(T)
+  alias_method "entries", "to_a"
+end

@@ -4,7 +4,7 @@ require "adjacency"
 require "set"
 
 def setup
-  edges = [{1, 2}, {2, 3}, {2, 4}, {4, 5}, {1, 6}, {6, 4}]    
+  edges = [{1, 2}, {2, 3}, {2, 4}, {4, 5}, {1, 6}, {6, 4}]
   loan_vertices = [7, 8, 9]
 
   dg1 = DirectedAdjacencyGraph(Int32, Set).new
