@@ -31,6 +31,7 @@ describe "Traversal" do
     dg, bfs, dfs, ug = setup()
     expected = [1, 2, 6, 3, 4, 5]
     bfs.to_a.should eq expected
+    ug.bfs_iterator.to_a.should eq expected
     ug.bfs_iterator(1).to_a.should eq expected
     ug.bfs_iterator(2).to_a.should eq [2, 1, 3, 4, 6, 5]
   end
@@ -81,6 +82,7 @@ finished_vertex: 5
 
   it "dfs_visiting" do
     dg, bfs, dfs, ug = setup()
+    dg.dfs_iterator.to_a.should eq [1, 6, 4, 5, 2, 3]
     dg.dfs_iterator(1).to_a.should eq [1, 6, 4, 5, 2, 3]
     dg.dfs_iterator(2).to_a.should eq [2, 4, 5, 3]
   end

@@ -142,7 +142,7 @@ class DFSIterator(T)
 end
 
 module Graph(T)
-  def dfs_iterator(v = self.detect { |x| true })
+  def dfs_iterator(v = self.find { |x| true })
     DFSIterator(T).new(self, v)
   end
 end
