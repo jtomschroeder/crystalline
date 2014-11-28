@@ -1,16 +1,10 @@
 
 require "./base"
 
-module MutableGraph(T, Edge)
-  include Graph(T, Edge)
+abstract class MutableGraph(T, Edge) < Graph(T, Edge)
 
-  def add_vertex(v)
-    raise NotImplementedError.new
-  end
-
-  def add_edge(u, v)
-    raise NotImplementedError.new
-  end
+  abstract def add_vertex(v)
+  abstract def add_edge(u, v)
 
   def add_vertices(a)
     a.each { |v| add_vertex v }
@@ -20,14 +14,9 @@ module MutableGraph(T, Edge)
     edges.each { |edge| add_edge(edge[0], edge[1]) }
   end
 
-  def remove_vertex(v)
-    raise NotImplementedError.new
-  end
-
-  def remove_edge(u, v)
-    raise NotImplementedError.new
-  end
-
+  abstract def remove_vertex(v)
+  abstract def remove_edge(u, v)
+  
   def remove_vertices(a)
     a.each { |v| remove_vertex v }
   end

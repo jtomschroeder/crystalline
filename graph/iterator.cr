@@ -1,15 +1,13 @@
 
 require "../containers/common"
 
-module Iterator(T)
+abstract class Iterator(T)
   include Enumerable(T)
 
   class EndOfIteratorException < Exception; end
-  class NotImplementedError < Exception; end
 
-  def at_end?; raise NotImplementedError.new; end
-
-  def at_beginning?; raise NotImplementedError.new; end
+  abstract def at_end?
+  abstract def at_beginning?
 
   def forward
     raise(EndOfIteratorException.new) if at_end?
@@ -29,8 +27,8 @@ module Iterator(T)
     until at_end?; basic_forward; end
   end
 
-  protected def basic_forward; raise NotImplementedError.new; end
-  protected def basic_backward; raise NotImplementedError.new; end
+  protected abstract def basic_forward
+  protected abstract def basic_backward
 
   protected def basic_current; backward; forward; end
   protected def basic_peek; forward; backward; end
@@ -55,7 +53,7 @@ module Iterator(T)
 
   def peek; at_end? ? self : basic_peek; end
 
-  def current_edge; [current,peek]; end
+  def current_edge; [current, peek]; end
 
   def first; set_to_begin; forward; end
 
@@ -73,8 +71,7 @@ module Iterator(T)
 
 end
 
-class CollectionIterator(T)
-  include Iterator(T)
+class CollectionIterator(T) < Iterator(T)
   
   getter pos
 

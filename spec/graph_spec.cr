@@ -22,12 +22,7 @@ def setup
   {dg1, dg2, ug}
 end
 
-class NotImplementedGraph
-  include Graph(Int32, DirectedEdge)
-end
-
 describe "Graph" do
-
   it "equality" do
     dg1, dg2, ug = setup()
     dg1.should eq dg1
@@ -53,11 +48,4 @@ describe "Graph" do
     merge.num_edges.should eq 6
     merge.num_vertices.should eq 9
   end
-
-  it "not_implemented" do
-    graph = NotImplementedGraph.new
-    expect_raises(NotImplementedError) { graph.each_vertex {} }
-    expect_raises(NotImplementedError) { graph.each_adjacent(nil) {} }
-  end
-
 end

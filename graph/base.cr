@@ -1,10 +1,9 @@
 
 require "../containers/common"
 
-class NotImplementedError < Exception; end
 class NoVertexError < Exception; end
 
-module Edge(T)
+class Edge(T)
   include Comparable(Edge)
 
   property :source, :target
@@ -29,14 +28,11 @@ module Edge(T)
   def <=>(e); self.to_a <=> e.to_a; end
 end
 
-class DirectedEdge(T)
-  include Edge(T)
-
+class DirectedEdge(T) < Edge(T)
   def initialize(@source : T, @target : T); end
 end
 
-class UndirectedEdge(T)
-  include Edge(T)
+class UndirectedEdge(T) < Edge(T)
 
   def initialize(@source : T, @target : T); end
 
@@ -51,18 +47,11 @@ class UndirectedEdge(T)
   def to_s; "(#{@source}=#{@target})"; end
 end
 
-module Graph(T, Edge)
+abstract class Graph(T, Edge)
   include Enumerable(T)
   
-  def each_vertex
-    raise NotImplementedError.new
-    yield (nil as T)
-  end
-
-  def each_adjacent(v)
-    raise NotImplementedError.new
-    yield (nil as T)
-  end
+  abstract def each_vertex(&block : T ->)
+  abstract def each_adjacent(v, &block : T ->)
 
   def each_edge
     if directed?

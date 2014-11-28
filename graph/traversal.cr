@@ -1,10 +1,10 @@
 
 require "./base"
+require "./adjacency"
 require "./iterator"
 require "../containers/common"
 
-module GraphVisitor(T)
-  include Iterator(T)
+class GraphVisitor(T) < Iterator(T)
 
   getter graph, color_map
 
@@ -34,8 +34,7 @@ module GraphVisitor(T)
 
 end
 
-module GraphIterator(T)
-  include GraphVisitor(T)
+class GraphIterator(T) < GraphVisitor(T)
 
   getter start_vertex
   property vertex_event, edge_event, tree_edge_event, back_edge_event, forward_edge_event, finish_vertex_event
@@ -84,8 +83,7 @@ module GraphIterator(T)
 
 end
 
-class BFSIterator(T)
-  include GraphIterator(T)
+class BFSIterator(T) < GraphIterator(T)
 
   def initialize(@graph, start = @graph.find { |x| true })
     @color_map :: Hash(T, Mark)
@@ -105,14 +103,13 @@ class BFSIterator(T)
   end
 end
 
-module Graph(T)
+class Graph(T, Edge)
 
   def bfs_iterator(v = self.find { |x| true })
     BFSIterator(T).new(self, v)
   end
 
   def bfs_search_tree_from(v)
-    require "./adjacency"
     bfs  = bfs_iterator(v)
     tree = DirectedAdjacencyGraph(T, Set).new
     bfs.tree_edge_event = ->(from : T, to : T) { tree.add_edge(from, to) }
@@ -122,8 +119,7 @@ module Graph(T)
 
 end
 
-class DFSIterator(T)
-  include GraphIterator(T)
+class DFSIterator(T) < GraphIterator(T)
 
   def initialize(@graph, start = @graph.find { |x| true })
     @color_map :: Hash(T, Mark)
@@ -144,7 +140,7 @@ class DFSIterator(T)
 
 end
 
-module Graph(T)
+abstract class Graph(T, Edge)
   def dfs_iterator(v = self.find { |x| true })
     DFSIterator(T).new(self, v)
   end

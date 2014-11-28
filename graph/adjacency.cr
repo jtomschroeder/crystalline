@@ -3,8 +3,7 @@ require "./mutable"
 
 # TODO: refactor AdjancencyGraph's common implementation
 
-class DirectedAdjacencyGraph(T, EdgeList)
-  include MutableGraph(T, DirectedEdge)
+class DirectedAdjacencyGraph(T, EdgeList) < MutableGraph(T, DirectedEdge)
 
   def initialize(*other_graphs)
     @vertice_dict = {} of T => EdgeList(T)
@@ -64,8 +63,7 @@ class DirectedAdjacencyGraph(T, EdgeList)
 
 end
 
-class AdjacencyGraph(T, EdgeList)
-  include MutableGraph(T, UndirectedEdge)
+class AdjacencyGraph(T, EdgeList) < MutableGraph(T, UndirectedEdge)
 
   def initialize(*other_graphs)
     @vertice_dict = {} of T => EdgeList(T)
@@ -129,7 +127,7 @@ class AdjacencyGraph(T, EdgeList)
 
 end
 
-module Graph(T, Edge)
+abstract class Graph(T, Edge)
 
   def to_adjacency
     result = directed? ? DirectedAdjacencyGraph(T, Set).new : AdjacencyGraph(T, Set).new
