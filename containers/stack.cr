@@ -1,6 +1,6 @@
 
-require "deque"
-require "common"
+require "./deque"
+require "./common"
 
 class Stack(T)
   include Enumerable
@@ -22,7 +22,7 @@ class Stack(T)
   def push(obj)
     @container.push_back(obj)
   end
-  alias_method "<<", "push"
+  alias_method :<<, :push
   
   def pop
     @container.pop_back as T?

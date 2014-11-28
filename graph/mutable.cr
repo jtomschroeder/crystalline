@@ -1,5 +1,5 @@
 
-require "base"
+require "./base"
 
 module MutableGraph(T, Edge)
   include Graph(T, Edge)

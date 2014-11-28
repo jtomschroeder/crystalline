@@ -1,5 +1,5 @@
 
-require "mutable"
+require "./mutable"
 
 # TODO: refactor AdjancencyGraph's common implementation
 

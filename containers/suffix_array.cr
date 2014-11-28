@@ -1,5 +1,5 @@
 
-require "common"
+require "./common"
 
 class SuffixArray
   def initialize(string : String)
@@ -27,6 +27,6 @@ class SuffixArray
     end
     return false
   end
-  alias_method "[]", "has_substring?"
+  alias_method :[], :has_substring?
   
 end

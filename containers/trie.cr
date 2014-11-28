@@ -1,5 +1,5 @@
 
-require "common"
+require "./common"
 
 class Trie
 
@@ -9,22 +9,23 @@ class Trie
   end
 
   def push(key : String, value : String)
-    return if key.empty?
-    @root = push_recursive(@root, key, 0, value)
-    value
+    unless key.empty?
+      @root = push_recursive(@root, key, 0, value)
+      value
+    end
   end
-  alias_method "[]=", "push"
+  alias_method :"[]=", :push
 
   private def push_recursive(node : Node?, string, index, value)
     char = string[index]
     node ||= Node.new(char, value)
     node_char = node.char
 
-    if (char < node_char)
+    if char < node_char
       node.left = push_recursive(node.left, string, index, value)
-    elsif (char > node_char)
+    elsif char > node_char
       node.right = push_recursive(node.right, string, index, value)
-    elsif (index < string.length - 1)
+    elsif index < string.length - 1
       node.mid = push_recursive(node.mid, string, index + 1, value)
     else
       node.end = true
@@ -41,22 +42,22 @@ class Trie
   def get(key : String)
     get_recursive(@root, key, 0).try &.value
   end
-  alias_method "[]", "get"
+  alias_method :[], :get
 
   private def get_recursive(node : Node?, string, index)
-    return unless node
+    if node
+      char = string[index]
+      node_char = node.char
 
-    char = string[index]
-    node_char = node.char
-
-    if (char < node_char)
-      return get_recursive(node.left, string, index)
-    elsif (char > node_char)
-      return get_recursive(node.right, string, index)
-    elsif (index < string.length - 1)
-      return get_recursive(node.mid, string, index + 1)
-    else
-      return node.last? ? node : nil
+      if char < node_char
+        return get_recursive(node.left, string, index)
+      elsif char > node_char
+        return get_recursive(node.right, string, index)
+      elsif index < string.length - 1
+        return get_recursive(node.mid, string, index + 1)
+      else
+        return node.last? ? node : nil
+      end
     end
   end
 
@@ -65,24 +66,22 @@ class Trie
   end
 
   private def prefix_recursive(node : Node?, string, index)
-    return 0 unless node && index != string.length
-
     len = 0
     rec_len = 0
-    if node
+    if node && index < string.length
       char = string[index]
       node_char = node.char
 
-      if (char < node_char)
+      if char < node_char
         rec_len = prefix_recursive(node.left, string, index)
-      elsif (char > node_char)
+      elsif char > node_char
         rec_len = prefix_recursive(node.right, string, index)
       else
         len = index + 1 if node.last?
         rec_len = prefix_recursive(node.mid, string, index + 1)
       end
     end
-    len > rec_len ? len : rec_len
+    Math.max(len, rec_len)
   end
 
   def wildcard(string : String)
@@ -90,20 +89,18 @@ class Trie
   end
 
   private def wildcard_recursive(node : Node?, string, index, prefix)
-    return [] of String unless node && index != string.length
-
     arr = [] of String
-    if node
+    if node && index < string.length
       char = string[index]
       node_char = node.char
 
-      if (char == '*' || char == '.' || char < node_char)
+      if char == '*' || char == '.' || char < node_char
         arr.concat wildcard_recursive(node.left, string, index, prefix)
       end
       if char == '*' || char == '.' || char > node_char
         arr.concat wildcard_recursive(node.right, string, index, prefix)
       end
-      if (char == '*' || char == '.' || char == node_char)
+      if char == '*' || char == '.' || char == node_char
         arr << "#{prefix}#{node.char}" if node.last?
         arr.concat wildcard_recursive(node.mid, string, index + 1, prefix + node_char.to_s)
       end

@@ -1,9 +1,9 @@
 
-macro alias_method(this, that)
-  def {{this.id}}(*args)
-    {{that.id}}(*args)
-  end
-end
+# macro alias_method(this, that)
+#   def {{this.id}}(*args)
+#     {{that.id}}(*args)
+#   end
+# end
 
 class Array(T)
   include Comparable(Array)
@@ -15,13 +15,13 @@ class Array(T)
     size <=> other.size
   end
 
-  alias_method "add", "push"
+  alias_method :add, :push
 end
 
 class Hash(K, V)
-  alias_method "size", "length"
+  alias_method :size, :length
 end
 
 module Enumerable(T)
-  alias_method "entries", "to_a"
+  alias_method :entries, :to_a
 end

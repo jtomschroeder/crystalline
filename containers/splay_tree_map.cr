@@ -1,6 +1,6 @@
 
-require "stack"
-require "queue"
+require "./stack"
+require "./queue"
 
 class SplayTreeMap(K, V)
 
@@ -49,7 +49,7 @@ class SplayTreeMap(K, V)
     @size += 1
     value
   end
-  alias_method "[]=", "push"
+  alias_method :"[]=", :push
 
   def height
     height_recursive(@root)
@@ -79,7 +79,7 @@ class SplayTreeMap(K, V)
       (root.key <=> key) == 0 ? root.value : nil
     end
   end
-  alias_method "[]", "get"
+  alias_method :[], :get
 
   def min
     return unless @root

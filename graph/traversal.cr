@@ -1,6 +1,6 @@
 
-require "base"
-require "iterator"
+require "./base"
+require "./iterator"
 require "../containers/common"
 
 module GraphVisitor(T)
@@ -18,15 +18,15 @@ module GraphVisitor(T)
     @color_map = Hash(T, Mark).new(Mark::WHITE)
   end
 
-  def finished_vertex?(v)
-    @color_map[v] == Mark::BLACK
-  end
+  # def finished_vertex?(v)
+  #   @color_map[v] == Mark::BLACK
+  # end
 
-  def distance_to_root(v)
-    if dist_map = @dist_map
-      dist_map[v]
-    end
-  end
+  # def distance_to_root(v)
+  #   if dist_map = @dist_map
+  #     dist_map[v]
+  #   end
+  # end
 
   def follow_edge?(u, v)
     @color_map[v] == Mark::WHITE
@@ -55,27 +55,30 @@ module GraphIterator(T)
     end
   end
 
+  # executes a callback fn if the callback fn is defined
+  private def callback(fn, *args)
+    if e = fn; fn.call(*args); end
+  end
+
   def basic_forward
     u = next_vertex
-    if e = vertex_event; e.call(u); end
+    callback(vertex_event, u)
     graph.each_adjacent(u) do |v|
-      if e = edge_event; e.call(u, v); end
+      callback(edge_event, u, v)
       if follow_edge?(u, v) # (u,v) is a tree edge
-        if e = tree_edge_event; e.call(u, v); end # also discovers v
+        callback(tree_edge_event, u, v) # also discovers v
         color_map[v] = Mark::GRAY # color of v was :WHITE
         @waiting.push(v)
       else # (u,v) is a non tree edge
         if color_map[v] == Mark::GRAY
-          # (u,v) has gray target
-          if e = back_edge_event; e.call(u, v); end
+          callback(back_edge_event, u, v) # (u,v) has gray target
         else
-          # (u,v) has black target
-          if e = forward_edge_event; e.call(u, v); end
+          callback(forward_edge_event, u, v) # (u,v) has black target
         end
       end
     end
     color_map[u] = Mark::BLACK
-    if e = finish_vertex_event; e.call(u); end
+    callback(finish_vertex_event, u)
     u
   end
 
@@ -109,7 +112,7 @@ module Graph(T)
   end
 
   def bfs_search_tree_from(v)
-    require "adjacency"
+    require "./adjacency"
     bfs  = bfs_iterator(v)
     tree = DirectedAdjacencyGraph(T, Set).new
     bfs.tree_edge_event = ->(from : T, to : T) { tree.add_edge(from, to) }

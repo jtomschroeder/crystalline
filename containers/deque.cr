@@ -1,5 +1,5 @@
 
-require "common"
+require "./common"
 
 class Deque(T)
   include Enumerable
@@ -20,7 +20,7 @@ class Deque(T)
   end
 
   getter size
-  alias_method "length", "size"
+  alias_method :length, :size
 
   def self.new(ary : Array(T))
     deque = Deque(T).new

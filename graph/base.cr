@@ -12,7 +12,7 @@ module Edge(T)
   def eql?(edge)
     @source == edge.source && @target == edge.target
   end
-  alias_method "==", "eql?"
+  alias_method :==, :eql?
 
   def reverse
     self.class.new(@target, @source)
@@ -80,11 +80,11 @@ module Graph(T, Edge)
 
   def directed?; false; end
 
-  alias_method "has_vertex?", "include?"  
+  alias_method :has_vertex?, :include?  
 
   def empty?; num_vertices == 0; end
 
-  alias_method "vertices", "to_a"
+  alias_method :vertices, :to_a
 
   def edges
     result = [] of Edge(T)
@@ -107,7 +107,7 @@ module Graph(T, Edge)
   def size()
     inject(0) { |n, v| n + 1 }
   end
-  alias_method "num_vertices", "size"
+  alias_method :num_vertices, :size
 
   def num_edges
     r = 0
@@ -124,7 +124,7 @@ module Graph(T, Edge)
       g.each_edge { |u, v| has_edge?(u, v) || return false } && 
       num_edges == g.num_edges
   end
-  alias_method "==", "eql?"
+  alias_method :==, :eql?
 
   private def each_edge_aux
     visited = {} of UndirectedEdge(T) => Bool

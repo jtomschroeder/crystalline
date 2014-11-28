@@ -35,7 +35,6 @@ describe "Trie" do
   end
 
   describe "(non-empty)" do
-
     it "should has_key? keys it has" do
       trie = setup_trie()
       trie.has_key?("Hello").should be_true

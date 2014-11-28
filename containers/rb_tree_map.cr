@@ -1,6 +1,6 @@
 
-require "stack"
-require "common"
+require "./stack"
+require "./common"
 
 class RBTreeMap(K, V)
   # include Enumerable
@@ -19,7 +19,7 @@ class RBTreeMap(K, V)
     end
     value
   end
-  alias_method "[]=", "push"
+  alias_method :"[]=", :push
 
   def size
     @root.try &.size || 0
@@ -40,7 +40,7 @@ class RBTreeMap(K, V)
   def get(key : K)
     get_recursive(@root, key)
   end
-  alias_method "[]", "get"
+  alias_method :[], :get
 
   private def get_recursive(node : Node?, key : K)
     if node
