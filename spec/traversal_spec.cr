@@ -1,7 +1,7 @@
 
 require "spec"
-require "./adjacency"
-require "./traversal"
+require "../graph/adjacency"
+require "../graph/traversal"
 
 def setup
   edges = [{1, 2}, {2, 3}, {2, 4}, {4, 5}, {1, 6}, {6, 4}]

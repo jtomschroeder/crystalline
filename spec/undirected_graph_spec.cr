@@ -1,6 +1,6 @@
 
 require "spec"
-require "./adjacency"
+require "../graph/adjacency"
 require "set"
 
 def setup()

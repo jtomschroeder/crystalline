@@ -1,6 +1,6 @@
 
 require "spec"
-require "./iterator"
+require "../graph/iterator"
 
 def new_collection_iterator; CollectionIterator(Int32).new(1..5); end
 
