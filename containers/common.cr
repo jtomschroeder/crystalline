@@ -1,10 +1,4 @@
 
-# macro alias_method(this, that)
-#   def {{this.id}}(*args)
-#     {{that.id}}(*args)
-#   end
-# end
-
 class Array(T)
   include Comparable(Array)
   
