@@ -2,8 +2,7 @@
 require "./heap"
 
 class PriorityQueue(T)
-  # include Enumerable(T)
-  
+
   alias Priority = Int32
 
   def initialize(comparator = ->(x : Priority, y : Priority) { (x <=> y) == 1 })
