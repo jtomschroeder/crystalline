@@ -1,5 +1,5 @@
 
-class Heap(T)
+class Heap(K, V)
   # include Enumerable(T)
 
   def size
@@ -7,15 +7,13 @@ class Heap(T)
   end
   alias_method :length, :size
   
-  def initialize(ary = [] of T, @comparator = ->(x : T, y : T) { (x <=> y) == -1 })
+  def initialize(@comparator = ->(x : K, y : K) { (x <=> y) == -1 })
     @next = nil
     @size = 0
-    @stored = {} of T? => Array(Node(T))
-    
-    ary.each { |n| push(n) } unless ary.empty?
+    @stored = {} of K? => Array(Node(K, V))
   end
   
-  def push(key : T, value = key)
+  def push(key : K, value = key)
     node = Node.new(key, value)
     # Add new node to the left of the @next node
     if nxt = @next
@@ -31,7 +29,7 @@ class Heap(T)
     end
     @size += 1
     
-    arr = [] of T
+    arr = [] of V
     if nxt = @next
       w = nxt.right
       until w == @next
@@ -41,14 +39,14 @@ class Heap(T)
       arr << nxt.value
     end
 
-    @stored[key] ||= [] of Node(T)
+    @stored[key] ||= [] of Node(K, V)
     @stored[key] << node
     value
   end
   alias_method :<<, :push
   
   def has_key?(key)
-    @stored[key] && !@stored[key].empty?
+    @stored.has_key?(key) && !@stored[key].empty?
   end
   
   def next
@@ -62,7 +60,7 @@ class Heap(T)
   def clear
     @next = nil
     @size = 0
-    @stored = {} of T? => Array(Node(T))
+    @stored = {} of K? => Array(Node(K, V))
     nil
   end
   
@@ -75,7 +73,7 @@ class Heap(T)
     @next
   end
 
-  def merge!(otherheap : Heap(T))
+  def merge!(otherheap : Heap(K, V))
     if other_root = otherheap.next_node
       
       # merge @stored hash's
@@ -154,14 +152,14 @@ class Heap(T)
   end
   alias_method :next!, :pop
 
-  def change_key(key : T, new_key : T)
+  def change_key(key : K, new_key : K)
     return if @stored[key].nil? || @stored[key].empty? || (key == new_key)
     
     # Must maintain heap property
     raise "Changing this key would not maintain heap property!" unless @comparator.call(new_key, key)
     if node = @stored[key].shift
       node.key = new_key
-      @stored[new_key] ||= [] of Node(T)
+      @stored[new_key] ||= [] of Node(K, V)
       @stored[new_key] << node
       if parent = node.parent
         # if heap property is violated
@@ -185,7 +183,7 @@ class Heap(T)
     
     if node = @stored[key].shift
       node.key = nil
-      @stored[nil] = [node]
+      @stored[nil] = [node] of Node(K, V)
       parent = node.parent
       if parent
         cut(node, parent)
@@ -202,15 +200,15 @@ class Heap(T)
   end
   
   # private
-  class Node(T)
+  class Node(K, V)
     property :parent, :child, :left, :right, :key, :value, :degree, :marked
 
-    def initialize(@key : T, @value : T)
+    def initialize(@key : K, @value : V)
       @degree = 0
       @marked = false
-      @right :: Node(T)?
+      @right :: Node(K, V)?
       @right = self
-      @left :: Node(T)?
+      @left :: Node(K, V)?
       @left = self
     end
     
@@ -245,7 +243,7 @@ class Heap(T)
   
   # Makes sure the structure does not contain nodes in the root list with equal degrees
   private def consolidate
-    roots = [] of Node(T)
+    roots = [] of Node(K, V)
     root = @next
     min = root
     # find the nodes in the list
@@ -256,7 +254,7 @@ class Heap(T)
       end
       break if root == @next
     end
-    degrees = {} of T => Node(T)
+    degrees = {} of Int32 => Node(K, V)
     roots.each do |rt|
       if m = min
         if key = rt.key
@@ -301,7 +299,7 @@ class Heap(T)
   end
   
   # remove x from y's children and add x to the root list
-  private def cut(x : Node(T), y : Node(T))
+  private def cut(x : Node(K, V), y : Node(K, V))
     x.left.not_nil!.right = x.right
     x.right.not_nil!.left = x.left
     y.degree -= 1
@@ -321,9 +319,9 @@ class Heap(T)
 end
 
 
-class MaxHeap(T) < Heap(T)
-  def initialize(ary = [] of T)
-    super(ary, ->(x : T, y : T) { (x <=> y) == 1 })
+class MaxHeap(K, V) < Heap(K, V)
+  def initialize
+    super(->(x : K, y : K) { (x <=> y) == 1 })
   end
   
   def max
@@ -335,9 +333,9 @@ class MaxHeap(T) < Heap(T)
   end
 end
 
-class MinHeap(T) < Heap(T)
-  def initialize(ary = [] of T)
-    super(ary, ->(x : T, y : T) { (x <=> y) == -1 })
+class MinHeap(K, V) < Heap(K, V)
+  def initialize
+    super(->(x : K, y : K) { (x <=> y) == -1 })
   end
   
   def min

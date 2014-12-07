@@ -6,7 +6,8 @@ def setup
   random_array = [] of Int32
   num_items = 100
   num_items.times { random_array << rand(num_items) }
-  heap = MaxHeap(Int32).new(random_array)
+  heap = MaxHeap(Int32, Int32).new
+  random_array.each { |n| heap << n }
   {heap, random_array, num_items}
 end
 
@@ -15,12 +16,12 @@ describe "Heap" do
   describe "(empty)" do
 
     it "should return nil when getting the maximum" do
-      heap = MaxHeap(Int32).new
+      heap = MaxHeap(Int32, Int32).new
       heap.max!.should be_nil
     end
     
     it "should let you insert and remove one item" do
-      heap = MaxHeap(Int32).new
+      heap = MaxHeap(Int32, Int32).new
 
       heap.size.should eq(0)
       
@@ -32,7 +33,8 @@ describe "Heap" do
     end
     
     it "should let you initialize with an array" do
-      heap = MaxHeap(Int32).new([1, 2, 3])
+      heap = MaxHeap(Int32, Int32).new
+      [1, 2, 3].each { |n| heap << n }
       heap.size.should eq(3)
     end
 
@@ -90,7 +92,8 @@ describe "Heap" do
     
     it "should change certain keys" do
       numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 101]
-      heap = MinHeap(Int32).new(numbers)
+      heap = MinHeap(Int32, Int32).new
+      numbers.each { |n| heap << n }
       heap.change_key(101, 50)
       heap.pop
       heap.pop
@@ -106,14 +109,16 @@ describe "Heap" do
     
     it "should not delete keys it doesn't have" do
       ary = [1, 2, 3, 4, 5, 6, 7, 8]
-      heap = MaxHeap(Int32).new(ary)
+      heap = MaxHeap(Int32, Int32).new
+      ary.each { |n| heap << n }
       heap.delete(0).should be_nil
       heap.size.should eq ary.length
     end
     
     it "should delete certain keys" do
       numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 100, 101]
-      heap = MinHeap(Int32).new(numbers)
+      heap = MinHeap(Int32, Int32).new
+      numbers.each { |n| heap << n }
       heap.delete(5)
       heap.pop
       heap.pop
@@ -130,7 +135,8 @@ describe "Heap" do
     it "should let you merge with another heap" do
       heap, random_array, num_items = setup()
       numbers = [1, 2, 3, 4, 5, 6, 7, 8]
-      otherheap = MaxHeap(Int32).new(numbers)
+      otherheap = MaxHeap(Int32, Int32).new
+      numbers.each { |n| otherheap << n }
       otherheap.size.should eq(8)
       heap.merge!(otherheap)
       
@@ -147,7 +153,8 @@ describe "Heap" do
     describe "min-heap" do
       it "should be in min->max order" do
         heap, random_array, num_items = setup()
-        heap = MinHeap(Int32).new(random_array)
+        heap = MinHeap(Int32, Int32).new
+        random_array.each { |n| heap << n }
         ordered = [] of Int32
         until heap.empty?
           if i = heap.min!
