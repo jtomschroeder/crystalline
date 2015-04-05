@@ -1,0 +1,20 @@
+language: c
+os:
+  - linux
+  - osx
+before_install: |
+  case $TRAVIS_OS_NAME in
+    linux)
+      curl http://dist.crystal-lang.org/apt/setup.sh | sudo bash
+      ;;
+
+    osx)
+      brew update
+      brew tap manastech/crystal
+      ;;
+  esac
+script:
+  - crystal spec
+branches:
+  only:
+    - master
