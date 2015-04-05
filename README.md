@@ -22,4 +22,4 @@ Pull requests are welcome! :)
 - [kanwei's Algorithms](https://github.com/kanwei/algorithms)
 - Ruby Graph Library (RGL)
 
-`crystalline` Copyright (c) 2014 Tom Schroeder, released under the MIT license
+`crystalline` Copyright (c) 2015 Tom Schroeder, released under the MIT license
