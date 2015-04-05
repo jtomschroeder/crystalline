@@ -1,6 +1,8 @@
 crystalline
 ===========
 
+[![Build Status](https://travis-ci.org/jtomschroeder/crystalline.svg)](https://travis-ci.org/jtomschroeder/crystalline)
+
 `crystalline` is a collection of containers & algorithms for the [crystal](https://github.com/manastech/crystal) programming language.
 
 - Containers
