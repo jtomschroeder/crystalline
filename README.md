@@ -1,8 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/jtomschroeder/crystalline.png?label=ready&title=Ready)](https://waffle.io/jtomschroeder/crystalline)
 crystalline
 ===========
 
 [![Build Status](https://travis-ci.org/jtomschroeder/crystalline.svg)](https://travis-ci.org/jtomschroeder/crystalline)
+[![Stories in Ready](https://badge.waffle.io/jtomschroeder/crystalline.png?label=ready&title=Ready)](https://waffle.io/jtomschroeder/crystalline)
 
 `crystalline` is a collection of containers & algorithms for the [crystal](https://github.com/manastech/crystal) programming language.
 
