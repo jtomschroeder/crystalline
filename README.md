@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/jtomschroeder/crystalline.png?label=ready&title=Ready)](https://waffle.io/jtomschroeder/crystalline)
 crystalline
 ===========
 
