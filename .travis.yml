@@ -5,4 +5,5 @@ before_install: |
 install: |
   brew install crystal
 script:
+  - crystal --version
   - crystal spec

@@ -16,7 +16,7 @@ describe "Iterator" do
     s = new_collection_iterator
     s.entries.should eq [1, 2, 3, 4, 5]
     s.at_end?.should be_true
-    expect_raises(Iterator::EndOfIteratorException) { s.forward }
+    expect_raises(AbstractIterator::EndOfIteratorException) { s.forward }
     s.backward.should eq 5
     s.forward.should eq 5
     s.current.should eq 5
@@ -24,7 +24,7 @@ describe "Iterator" do
 
     s.set_to_begin
     s.at_beginning?.should be_true
-    expect_raises(Iterator::EndOfIteratorException) { s.backward }
+    expect_raises(AbstractIterator::EndOfIteratorException) { s.backward }
     s.current.should eq s
     s.peek.should eq 1
     s.forward.should eq 1

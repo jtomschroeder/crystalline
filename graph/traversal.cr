@@ -4,7 +4,7 @@ require "./adjacency"
 require "./iterator"
 require "../containers/common"
 
-class GraphVisitor(T) < Iterator(T)
+class GraphVisitor(T) < AbstractIterator(T)
 
   getter graph, color_map
 

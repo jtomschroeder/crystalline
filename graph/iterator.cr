@@ -1,7 +1,7 @@
 
 require "../containers/common"
 
-abstract class Iterator(T)
+abstract class AbstractIterator(T)
   include Enumerable(T)
 
   class EndOfIteratorException < Exception; end
@@ -71,8 +71,8 @@ abstract class Iterator(T)
 
 end
 
-class CollectionIterator(T) < Iterator(T)
-  
+class CollectionIterator(T) < AbstractIterator(T)
+
   getter pos
 
   def initialize(seq)
