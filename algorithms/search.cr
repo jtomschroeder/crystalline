@@ -1,7 +1,7 @@
 module Algorithms::Search
 
   def self.binary_search(container, item)
-    return nil unless item && item.is_a?(Number)
+    return nil unless item
 
     low = 0
     high = container.size - 1
@@ -16,7 +16,6 @@ module Algorithms::Search
         return mid
       end    
     end
-
     nil
   end
 
