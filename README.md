@@ -2,7 +2,6 @@ crystalline
 ===========
 
 [![Build Status](https://travis-ci.org/jtomschroeder/crystalline.svg)](https://travis-ci.org/jtomschroeder/crystalline)
-[![](https://tokei.rs/b1/github/jtomschroeder/crystalline)](https://github.com/jtomschroeder/crystalline)
 
 `crystalline` is a collection of containers & algorithms for the [crystal](https://github.com/manastech/crystal) programming language.
 
@@ -23,4 +22,4 @@ Pull requests are welcome! :)
 - [kanwei's Algorithms](https://github.com/kanwei/algorithms)
 - Ruby Graph Library (RGL)
 
-`crystalline` Copyright (c) 2015 Tom Schroeder, released under the MIT license
+`crystalline` Copyright (c) 2016 Tom Schroeder, released under the MIT license
