@@ -1,8 +1,6 @@
-
 require "./heap"
 
 class PriorityQueue(T)
-
   alias Priority = Int32
 
   def initialize(comparator = ->(x : Priority, y : Priority) { (x <=> y) == 1 })
@@ -12,7 +10,6 @@ class PriorityQueue(T)
   def size
     @heap.size
   end
-  alias_method :length, :size
 
   def push(object : T, priority : Priority)
     @heap.push(priority, object)
@@ -37,10 +34,12 @@ class PriorityQueue(T)
   def pop
     @heap.pop
   end
-  alias_method :next!, :pop
+
+  def next!
+    pop
+  end
 
   def delete(priority : Priority)
     @heap.delete(priority)
   end
-
 end
