@@ -14,7 +14,7 @@ describe "Queue" do
       queue.size.should eq(1)
     end
 
-    it "should return nil when sent #next" do
+    it "should return nil when sent #next?" do
       queue = Queue(Int32).new
       queue.next?.should be_nil
     end
