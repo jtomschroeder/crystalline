@@ -1,12 +1,11 @@
-
 require "spec"
 require "../containers/queue"
 
 describe "Queue" do
   describe "(empty)" do
-    it "should return nil when sent #pop" do
+    it "should return nil when sent #pop?" do
       queue = Queue(Int32).new
-      queue.pop.should be_nil
+      queue.pop?.should be_nil
     end
 
     it "should return a size of 1 when sent #push" do
@@ -17,7 +16,7 @@ describe "Queue" do
 
     it "should return nil when sent #next" do
       queue = Queue(Int32).new
-      queue.next.should be_nil
+      queue.next?.should be_nil
     end
 
     it "should return empty?" do
@@ -52,8 +51,8 @@ describe "Queue" do
     it "should return nil after all gets" do
       queue = Queue(Int32).new([1, 2, 3, 5, 8])
       5.times { queue.pop }
-      queue.pop.should be_nil
-      queue.next.should be_nil
+      queue.pop?.should be_nil
+      queue.next?.should be_nil
     end
   end
 end

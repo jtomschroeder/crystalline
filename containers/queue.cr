@@ -1,9 +1,8 @@
-
 require "./deque"
 require "./common"
 
 class Queue(T)
-  include Enumerable
+  include Enumerable(T)
 
   def initialize
     @container = Deque(T).new
@@ -16,20 +15,31 @@ class Queue(T)
   end
 
   def next
-    @container.front
+    @container.first
+  end
+
+  def next?
+    @container.first?
   end
 
   def push(obj)
-    @container.push_back(obj)
+    @container.push(obj)
   end
-  alias_method :<<, :push
+
+  def <<(obj)
+    push obj
+  end
 
   def pop
-    @container.pop_front
+    @container.shift
   end
 
-  delegate size, @container
-  delegate empty?, @container
+  def pop?
+    @container.shift?
+  end
+
+  delegate size, to: @container
+  delegate empty?, to: @container
 
   def each
     @container.each { |e| yield e }
