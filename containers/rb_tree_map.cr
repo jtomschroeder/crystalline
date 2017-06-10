@@ -1,12 +1,12 @@
-
 require "./stack"
 require "./common"
 
 class RBTreeMap(K, V)
   # include Enumerable
 
+  @root : Node(K, V)?
+
   def initialize
-    @root :: Node?
     @root = nil
     @height_black = 0
   end
@@ -19,7 +19,10 @@ class RBTreeMap(K, V)
     end
     value
   end
-  alias_method :"[]=", :push
+
+  def []=(key, value)
+    push(key, value)
+  end
 
   def size
     @root.try &.size || 0
@@ -40,14 +43,17 @@ class RBTreeMap(K, V)
   def get(key : K)
     get_recursive(@root, key)
   end
-  alias_method :[], :get
+
+  def [](key : K)
+    get key
+  end
 
   private def get_recursive(node : Node?, key : K)
     if node
       case key <=> node.key
-        when  0 then return node.value
-        when -1 then return get_recursive(node.left, key)
-        when  1 then return get_recursive(node.right, key)
+      when  0 then return node.value
+      when -1 then return get_recursive(node.left, key)
+      when  1 then return get_recursive(node.right, key)
       end
     end
   end
@@ -108,7 +114,7 @@ class RBTreeMap(K, V)
       if (key <=> node.key) == 0
         result = node.value
         if node_right = node.right
-          node.value = get_recursive(node_right, min_recursive(node_right))
+          node.value = get_recursive(node_right, min_recursive(node_right)).not_nil!
           node.key = min_recursive(node_right)
           node.right = delete_min_recursive(node_right)[0]
         end
@@ -183,7 +189,7 @@ class RBTreeMap(K, V)
     node = @root
     return unless node
 
-    stack = Stack(Node).new
+    stack = Stack(Node(K, V)).new
 
     # In-order traversal (keys in ascending order)
     while !stack.empty? || !node.nil?
@@ -209,25 +215,22 @@ class RBTreeMap(K, V)
   # private
   module Color
     BLACK = 0
-    RED = 1
+    RED   = 1
   end
 
   # private
-  class Node
-    property :color, :key, :value, :left, :right, :size, :height
+  class Node(K, V)
+    property color
+    property key : K
+    property value : V
+    property left : Node(K, V)?
+    property right : Node(K, V)?
+    property size
+    property height
+
     def initialize(@key : K, @value : V)
       @color = Color::RED
-
-      @left :: Node?
-      @left = nil
-
-      @right :: Node?
-      @right = nil
-
-      @size :: Int32
       @size = 1
-
-      @height :: Int32
       @height = 1
     end
 
@@ -247,7 +250,7 @@ class RBTreeMap(K, V)
 
     def update_size
       @size = (@left.try &.size || 0) + (@right.try &.size || 0) + 1
-      left_height  = @left.try &.height || 0
+      left_height = @left.try &.height || 0
       right_height = @right.try &.height || 0
       if left_height > right_height
         @height = left_height + 1
@@ -342,9 +345,9 @@ class RBTreeMap(K, V)
   private def insert(node : Node?, key : K, value : V)
     if node
       case key <=> node.key
-        when  0 then node.value = value
-        when -1 then node.left = insert(node.left, key, value)
-        when  1 then node.right = insert(node.right, key, value)
+      when  0 then node.value = value
+      when -1 then node.left = insert(node.left, key, value)
+      when  1 then node.right = insert(node.right, key, value)
       end
 
       node.rotate_left if node.right.try &.red?
