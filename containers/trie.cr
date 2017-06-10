@@ -1,11 +1,9 @@
-
 require "./common"
 
 class Trie
+  @root : Node?
 
   def initialize
-    @root :: Node?
-    @root = nil
   end
 
   def push(key : String, value : String)
@@ -14,7 +12,10 @@ class Trie
       value
     end
   end
-  alias_method :"[]=", :push
+
+  def []=(key, value)
+    push(key, value)
+  end
 
   private def push_recursive(node : Node?, string, index, value)
     char = string[index]
@@ -25,13 +26,13 @@ class Trie
       node.left = push_recursive(node.left, string, index, value)
     elsif char > node_char
       node.right = push_recursive(node.right, string, index, value)
-    elsif index < string.length - 1
+    elsif index < string.size - 1
       node.mid = push_recursive(node.mid, string, index + 1, value)
     else
       node.end = true
       node.value = value
     end
-    
+
     node
   end
 
@@ -42,7 +43,10 @@ class Trie
   def get(key : String)
     get_recursive(@root, key, 0).try &.value
   end
-  alias_method :[], :get
+
+  def [](key)
+    get key
+  end
 
   private def get_recursive(node : Node?, string, index)
     if node
@@ -53,7 +57,7 @@ class Trie
         return get_recursive(node.left, string, index)
       elsif char > node_char
         return get_recursive(node.right, string, index)
-      elsif index < string.length - 1
+      elsif index < string.size - 1
         return get_recursive(node.mid, string, index + 1)
       else
         return node.last? ? node : nil
@@ -68,7 +72,7 @@ class Trie
   private def prefix_recursive(node : Node?, string, index)
     len = 0
     rec_len = 0
-    if node && index < string.length
+    if node && index < string.size
       char = string[index]
       node_char = node.char
 
@@ -90,7 +94,7 @@ class Trie
 
   private def wildcard_recursive(node : Node?, string, index, prefix)
     arr = [] of String
-    if node && index < string.length
+    if node && index < string.size
       char = string[index]
       node_char = node.char
 
@@ -110,15 +114,15 @@ class Trie
 
   # private
   class Node
-    property :char
-    property :value
-    property :left
-    property :mid
-    property :right
-    property :end
+    property char
+    property value
+    property left : Node?
+    property mid : Node?
+    property right : Node?
+    property :end # not sure if this is a good name
+
 
     def initialize(@char : Char, @value : String)
-      @left = @mid = @right = nil
       @end = false
     end
 
@@ -126,5 +130,4 @@ class Trie
       @end == true
     end
   end
-
 end
