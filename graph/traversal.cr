@@ -1,12 +1,11 @@
-
 require "./base"
 require "./adjacency"
 require "./iterator"
 require "../containers/common"
 
-class GraphVisitor(T) < AbstractIterator(T)
-
-  getter graph, color_map
+abstract class GraphVisitor(T) < AbstractIterator(T)
+  getter graph
+  getter color_map
 
   enum Mark
     WHITE
@@ -31,13 +30,16 @@ class GraphVisitor(T) < AbstractIterator(T)
   def follow_edge?(u, v)
     @color_map[v] == Mark::WHITE
   end
-
 end
 
 class GraphIterator(T) < GraphVisitor(T)
-
   getter start_vertex
-  property vertex_event, edge_event, tree_edge_event, back_edge_event, forward_edge_event, finish_vertex_event
+  property vertex_event
+  property edge_event
+  property tree_edge_event
+  property back_edge_event
+  property forward_edge_event
+  property finish_vertex_event
 
   def at_beginning?
     @color_map.size == 1
@@ -56,7 +58,9 @@ class GraphIterator(T) < GraphVisitor(T)
 
   # executes a callback fn if the callback fn is defined
   private def callback(fn, *args)
-    if e = fn; fn.call(*args); end
+    if e = fn
+      fn.call(*args)
+    end
   end
 
   def basic_forward
@@ -64,9 +68,9 @@ class GraphIterator(T) < GraphVisitor(T)
     callback(vertex_event, u)
     graph.each_adjacent(u) do |v|
       callback(edge_event, u, v)
-      if follow_edge?(u, v) # (u,v) is a tree edge
+      if follow_edge?(u, v)             # (u,v) is a tree edge
         callback(tree_edge_event, u, v) # also discovers v
-        color_map[v] = Mark::GRAY # color of v was :WHITE
+        color_map[v] = Mark::GRAY       # color of v was :WHITE
         @waiting.push(v)
       else # (u,v) is a non tree edge
         if color_map[v] == Mark::GRAY
@@ -81,18 +85,19 @@ class GraphIterator(T) < GraphVisitor(T)
     u
   end
 
+  def basic_backward
+    raise "basic_backward is not supported" # TODO - what to do with it?
+  end
 end
 
 class BFSIterator(T) < GraphIterator(T)
+  @start_vertex : T
 
-  def initialize(@graph, start = @graph.find { |x| true })
-    @color_map :: Hash(T, Mark)
+  def initialize(@graph : Graph, start = @graph.find { |x| true })
+    @color_map = Hash(T, Mark).new
     reset
-    @start_vertex :: T
     @start_vertex = start
-    @waiting :: Array(T)
     @waiting = [] of T
-    @dist_map :: Hash(T, T)
     @dist_map = Hash(T, T).new(0)
     set_to_begin
   end
@@ -104,31 +109,27 @@ class BFSIterator(T) < GraphIterator(T)
 end
 
 class Graph(T, Edge)
-
   def bfs_iterator(v = self.find { |x| true })
     BFSIterator(T).new(self, v)
   end
 
   def bfs_search_tree_from(v)
-    bfs  = bfs_iterator(v)
+    bfs = bfs_iterator(v)
     tree = DirectedAdjacencyGraph(T, Set).new
     bfs.tree_edge_event = ->(from : T, to : T) { tree.add_edge(from, to) }
     bfs.set_to_end # does the search
     tree
   end
-
 end
 
 class DFSIterator(T) < GraphIterator(T)
+  @start_vertex : T
 
   def initialize(@graph, start = @graph.find { |x| true })
-    @color_map :: Hash(T, Mark)
+    @color_map = Hash(T, Mark).new
     reset
-    @start_vertex :: T
     @start_vertex = start
-    @waiting :: Array(T)
     @waiting = [] of T
-    @dist_map :: Hash(T, T)
     @dist_map = Hash(T, T).new(0)
     set_to_begin
   end
@@ -137,7 +138,6 @@ class DFSIterator(T) < GraphIterator(T)
     # waiting is a stack
     @waiting.pop
   end
-
 end
 
 abstract class Graph(T, Edge)

@@ -1,14 +1,12 @@
-
 require "./base"
 
 abstract class MutableGraph(T, Edge, EdgeList) < Graph(T, Edge)
-
   def initialize(*other_graphs)
-    @vertice_dict = {} of T => EdgeList(T)
-    
+    @vertice_dict = {} of T => EdgeList
+
     other_graphs.each do |g|
-      g.each_vertex {|v| add_vertex v}
-      g.each_edge {|v,w| add_edge v,w}
+      g.each_vertex { |v| add_vertex v }
+      g.each_edge { |v, w| add_edge v, w }
     end
   end
 
@@ -24,7 +22,7 @@ abstract class MutableGraph(T, Edge, EdgeList) < Graph(T, Edge)
     begin
       adjacency_list = @vertice_dict[v]
       adjacency_list.each { |e| yield e }
-    rescue MissingKey
+    rescue KeyError
       raise NoVertexError.new("No vertex #{v}.")
     end
   end
@@ -43,12 +41,12 @@ abstract class MutableGraph(T, Edge, EdgeList) < Graph(T, Edge)
     a.each { |v| remove_vertex v }
   end
 
-  def has_edge? (u, v)
+  def has_edge?(u, v)
     has_vertex?(u) && @vertice_dict[u].includes?(v)
   end
 
-  def add_vertex (v)
-    @vertice_dict[v] ||= EdgeList(T).new
+  def add_vertex(v)
+    @vertice_dict[v] ||= EdgeList.new
   end
 
   protected abstract def basic_add_edge(u, v)
@@ -59,10 +57,9 @@ abstract class MutableGraph(T, Edge, EdgeList) < Graph(T, Edge)
     basic_add_edge(u, v)
   end
 
-  def remove_vertex (v)
+  def remove_vertex(v)
     @vertice_dict.delete(v)
     # remove v from all adjacency lists
     @vertice_dict.each_value { |adjList| adjList.delete(v) }
   end
-
 end

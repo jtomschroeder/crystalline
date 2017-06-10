@@ -1,4 +1,3 @@
-
 require "spec"
 require "../graph/adjacency"
 require "../graph/traversal"
@@ -6,19 +5,18 @@ require "../graph/traversal"
 def setup
   edges = [{1, 2}, {2, 3}, {2, 4}, {4, 5}, {1, 6}, {6, 4}]
 
-  dg = DirectedAdjacencyGraph(Int32, Array).new
+  dg = DirectedAdjacencyGraph(Int32, Array(Int32)).new
   dg.add_edges(edges)
 
   bfs = dg.bfs_iterator(1)
   dfs = dg.dfs_iterator(1)
 
-  ug = AdjacencyGraph(Int32, Array).new
+  ug = AdjacencyGraph(Int32, Array(Int32)).new
   ug.add_edges(edges)
   {dg, bfs, dfs, ug}
 end
 
 describe "Traversal" do
-
   it "bfs_iterator_creation" do
     dg, bfs, dfs, ug = setup()
     bfs.at_beginning?.should be_true
@@ -69,11 +67,11 @@ finished_vertex: 5
     s = ""
     dg.add_edge 5, 3 # for the forward_edge 5-3
 
-    bfs.vertex_event       = ->(v : Int32)            { s += "examine_vertex : #{v}\n" }
-    bfs.edge_event         = ->(u : Int32, v : Int32) { s += "examine_edge   : #{u}-#{v}\n" }
-    bfs.tree_edge_event    = ->(u : Int32, v : Int32) { s += "tree_edge      : #{u}-#{v}\n"}
-    bfs.back_edge_event    = ->(u : Int32, v : Int32) { s += "back_edge      : #{u}-#{v}\n"}
-    bfs.forward_edge_event = ->(u : Int32, v : Int32) { s += "forward_edge   : #{u}-#{v}\n"}
+    bfs.vertex_event = ->(v : Int32) { s += "examine_vertex : #{v}\n" }
+    bfs.edge_event = ->(u : Int32, v : Int32) { s += "examine_edge   : #{u}-#{v}\n" }
+    bfs.tree_edge_event = ->(u : Int32, v : Int32) { s += "tree_edge      : #{u}-#{v}\n" }
+    bfs.back_edge_event = ->(u : Int32, v : Int32) { s += "back_edge      : #{u}-#{v}\n" }
+    bfs.forward_edge_event = ->(u : Int32, v : Int32) { s += "forward_edge   : #{u}-#{v}\n" }
 
     bfs.each { |v| s += "finished_vertex: #{v}\n" }
 
@@ -120,11 +118,11 @@ finished_vertex: 2
     s = ""
     dg.add_edge 5, 3
 
-    dfs.vertex_event       = ->(v : Int32)            { s += "examine_vertex : #{v}\n" }
-    dfs.edge_event         = ->(u : Int32, v : Int32) { s += "examine_edge   : #{u}-#{v}\n" }
-    dfs.tree_edge_event    = ->(u : Int32, v : Int32) { s += "tree_edge      : #{u}-#{v}\n"}
-    dfs.back_edge_event    = ->(u : Int32, v : Int32) { s += "back_edge      : #{u}-#{v}\n"}
-    dfs.forward_edge_event = ->(u : Int32, v : Int32) { s += "forward_edge   : #{u}-#{v}\n"}
+    dfs.vertex_event = ->(v : Int32) { s += "examine_vertex : #{v}\n" }
+    dfs.edge_event = ->(u : Int32, v : Int32) { s += "examine_edge   : #{u}-#{v}\n" }
+    dfs.tree_edge_event = ->(u : Int32, v : Int32) { s += "tree_edge      : #{u}-#{v}\n" }
+    dfs.back_edge_event = ->(u : Int32, v : Int32) { s += "back_edge      : #{u}-#{v}\n" }
+    dfs.forward_edge_event = ->(u : Int32, v : Int32) { s += "forward_edge   : #{u}-#{v}\n" }
 
     dfs.each { |v| s += "finished_vertex: #{v}\n" }
 
@@ -135,5 +133,4 @@ finished_vertex: 2
     dg, bfs, dfs, ug = setup()
     dg.bfs_search_tree_from(1).edges.sort.sum("", &.to_s).should eq "(1-2)(1-6)(2-3)(2-4)(4-5)"
   end
-
 end
