@@ -1,13 +1,11 @@
-
 require "./stack"
 require "./queue"
 
 class SplayTreeMap(K, V)
-
   def initialize
     @root = nil
     @size = 0
-    @header = Node.new(nil, nil)
+    @header = Node(K, V).new(nil, nil)
   end
 
   getter size
@@ -15,12 +13,12 @@ class SplayTreeMap(K, V)
   def clear
     @root = nil
     @size = 0
-    @header = Node.new(nil, nil)
+    @header = Node(K, V).new(nil, nil)
   end
-  
+
   def push(key, value)
     unless @root
-      @root = Node.new(key, value)
+      @root = Node(K, V).new(key, value)
       @size = 1
       return value
     end
@@ -33,14 +31,14 @@ class SplayTreeMap(K, V)
         root.value = value
         return value
       end
-      node = Node.new(key, value)
+      node = Node(K, V).new(key, value)
       if cmp < 1
-        node.left  = root.left
+        node.left = root.left
         node.right = root
-        root.left  = nil
+        root.left = nil
       else
         node.right = root.right
-        node.left  = root
+        node.left = root
         root.right = nil
       end
     end
@@ -49,7 +47,10 @@ class SplayTreeMap(K, V)
     @size += 1
     value
   end
-  alias_method :"[]=", :push
+
+  def []=(key, value)
+    push(key, value)
+  end
 
   def height
     height_recursive(@root)
@@ -58,7 +59,7 @@ class SplayTreeMap(K, V)
   # Recursively determine height
   private def height_recursive(node : Node?)
     if node
-      left_height  = 1 + height_recursive(node.left)
+      left_height = 1 + height_recursive(node.left)
       right_height = 1 + height_recursive(node.right)
 
       left_height > right_height ? left_height : right_height
@@ -73,17 +74,20 @@ class SplayTreeMap(K, V)
 
   def get(key : K)
     return unless @root
-        
+
     splay(key)
     if root = @root
       (root.key <=> key) == 0 ? root.value : nil
     end
   end
-  alias_method :[], :get
+
+  def [](key : K)
+    get key
+  end
 
   def min
     return unless @root
-    
+
     n = @root
     while n && n.left
       n = n.left
@@ -97,7 +101,7 @@ class SplayTreeMap(K, V)
 
   def max
     return unless @root
-    
+
     n = @root
     while n && n.right
       n = n.right
@@ -133,7 +137,7 @@ class SplayTreeMap(K, V)
   def each
     return nil if @root.nil?
 
-    stack = Stack(Node).new
+    stack = Stack(Node(K, V)).new
     cursor = @root
 
     while cursor
@@ -150,11 +154,11 @@ class SplayTreeMap(K, V)
   end
 
   # private
-  class Node
-    property :left
-    property :right
+  class Node(K, V)
+    property left : Node(K, V)?
+    property right : Node(K, V)?
 
-    def initialize(@key : K, @value : V, @left = nil, @right = nil)
+    def initialize(@key : K?, @value : V?, @left = nil, @right = nil)
     end
 
     # Enforce type of node properties (key & value)
@@ -214,5 +218,4 @@ class SplayTreeMap(K, V)
       @root = t
     end
   end
-
 end
