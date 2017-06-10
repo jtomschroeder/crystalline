@@ -1,4 +1,3 @@
-
 require "../containers/heap"
 require "spec"
 
@@ -12,9 +11,7 @@ def setup
 end
 
 describe "Heap" do
-
   describe "(empty)" do
-
     it "should return nil when getting the maximum" do
       heap = MaxHeap(Int32, Int32).new
       heap.max!.should be_nil
@@ -37,11 +34,9 @@ describe "Heap" do
       [1, 2, 3].each { |n| heap << n }
       heap.size.should eq(3)
     end
-
   end
 
   describe "(non-empty)" do
-
     it "should display the correct size" do
       heap, random_array, num_items = setup()
       heap.size.should eq(num_items)
@@ -112,7 +107,7 @@ describe "Heap" do
       heap = MaxHeap(Int32, Int32).new
       ary.each { |n| heap << n }
       heap.delete(0).should be_nil
-      heap.size.should eq ary.length
+      heap.size.should eq ary.size
     end
 
     it "should delete certain keys" do
@@ -164,6 +159,5 @@ describe "Heap" do
         ordered.should eq random_array.sort
       end
     end
-
   end
 end

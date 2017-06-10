@@ -4,10 +4,10 @@ class Heap(K, V)
   def size
     @size
   end
-  alias_method :length, :size
 
+  @next : Node(K, V)?
+  @comparator : Proc(K, K, Bool)
   def initialize(@comparator = ->(x : K, y : K) { (x <=> y) == -1 })
-    @next = nil
     @size = 0
     @stored = {} of K? => Array(Node(K, V))
   end
@@ -44,7 +44,10 @@ class Heap(K, V)
     @stored[key] << node
     value
   end
-  alias_method :<<, :push
+
+  def <<(key : K)
+    push(key)
+  end
 
   def has_key?(key)
     @stored.has_key?(key) && !@stored[key].empty?
@@ -157,7 +160,6 @@ class Heap(K, V)
 
     popped.value
   end
-  alias_method :next!, :pop
 
   def change_key(key : K, new_key : K)
     return if @stored[key].nil? || @stored[key].empty? || (key == new_key)
@@ -208,14 +210,19 @@ class Heap(K, V)
 
   # private
   class Node(K, V)
-    property :parent, :child, :left, :right, :key, :value, :degree, :marked
+    property parent : Node(K, V)?
+    property child : Node(K, V)?
+    property left : Node(K, V)?
+    property right : Node(K, V)?
+    property key
+    property value
+    property degree
+    property marked
 
-    def initialize(@key : K, @value : V)
+    def initialize(@key : K?, @value : V)
       @degree = 0
       @marked = false
-      @right :: Node(K, V)?
       @right = self
-      @left :: Node(K, V)?
       @left = self
     end
 
