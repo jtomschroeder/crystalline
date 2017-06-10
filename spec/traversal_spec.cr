@@ -67,11 +67,11 @@ finished_vertex: 5
     s = ""
     dg.add_edge 5, 3 # for the forward_edge 5-3
 
-    bfs.vertex_event = ->(v : Int32) { s += "examine_vertex : #{v}\n" }
-    bfs.edge_event = ->(u : Int32, v : Int32) { s += "examine_edge   : #{u}-#{v}\n" }
-    bfs.tree_edge_event = ->(u : Int32, v : Int32) { s += "tree_edge      : #{u}-#{v}\n" }
-    bfs.back_edge_event = ->(u : Int32, v : Int32) { s += "back_edge      : #{u}-#{v}\n" }
-    bfs.forward_edge_event = ->(u : Int32, v : Int32) { s += "forward_edge   : #{u}-#{v}\n" }
+    bfs.vertex_event = ->(v : Int32) { s += "examine_vertex : #{v}\n"; nil }
+    bfs.edge_event = ->(u : Int32, v : Int32) { s += "examine_edge   : #{u}-#{v}\n"; nil }
+    bfs.tree_edge_event = ->(u : Int32, v : Int32) { s += "tree_edge      : #{u}-#{v}\n"; nil }
+    bfs.back_edge_event = ->(u : Int32, v : Int32) { s += "back_edge      : #{u}-#{v}\n"; nil }
+    bfs.forward_edge_event = ->(u : Int32, v : Int32) { s += "forward_edge   : #{u}-#{v}\n"; nil }
 
     bfs.each { |v| s += "finished_vertex: #{v}\n" }
 
@@ -118,11 +118,11 @@ finished_vertex: 2
     s = ""
     dg.add_edge 5, 3
 
-    dfs.vertex_event = ->(v : Int32) { s += "examine_vertex : #{v}\n" }
-    dfs.edge_event = ->(u : Int32, v : Int32) { s += "examine_edge   : #{u}-#{v}\n" }
-    dfs.tree_edge_event = ->(u : Int32, v : Int32) { s += "tree_edge      : #{u}-#{v}\n" }
-    dfs.back_edge_event = ->(u : Int32, v : Int32) { s += "back_edge      : #{u}-#{v}\n" }
-    dfs.forward_edge_event = ->(u : Int32, v : Int32) { s += "forward_edge   : #{u}-#{v}\n" }
+    dfs.vertex_event = ->(v : Int32) { s += "examine_vertex : #{v}\n"; nil }
+    dfs.edge_event = ->(u : Int32, v : Int32) { s += "examine_edge   : #{u}-#{v}\n"; nil }
+    dfs.tree_edge_event = ->(u : Int32, v : Int32) { s += "tree_edge      : #{u}-#{v}\n"; nil }
+    dfs.back_edge_event = ->(u : Int32, v : Int32) { s += "back_edge      : #{u}-#{v}\n"; nil }
+    dfs.forward_edge_event = ->(u : Int32, v : Int32) { s += "forward_edge   : #{u}-#{v}\n"; nil }
 
     dfs.each { |v| s += "finished_vertex: #{v}\n" }
 

@@ -82,7 +82,7 @@ abstract class Graph(T, Edge)
   end
 
   def has_vertex?(v)
-    include? v
+    includes? v
   end
 
   def empty?
@@ -94,8 +94,8 @@ abstract class Graph(T, Edge)
   end
 
   def edges
-    result = [] of Edge(T)
-    each_edge { |u, v| result << Edge(T).new(u, v) }
+    result = [] of Edge
+    each_edge { |u, v| result << Edge.new(u, v) }
     result
   end
 

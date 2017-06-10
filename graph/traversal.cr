@@ -5,12 +5,16 @@ require "../containers/common"
 
 abstract class GraphVisitor(T) < AbstractIterator(T)
   getter graph
-  getter color_map
 
   enum Mark
     WHITE
     GRAY
     BLACK
+  end
+  getter color_map : Hash(T, Mark)
+
+  def initialize
+    @color_map = Hash(T, Mark).new(Mark::WHITE)
   end
 
   def reset
@@ -33,13 +37,17 @@ abstract class GraphVisitor(T) < AbstractIterator(T)
 end
 
 class GraphIterator(T) < GraphVisitor(T)
+  # generic aliases don't work?
+  # alias VertexCallback = Proc(T, Nil)?
+  # alias EdgeCallback = Proc(T, T, Nil)?
+
   getter start_vertex
-  property vertex_event
-  property edge_event
-  property tree_edge_event
-  property back_edge_event
-  property forward_edge_event
-  property finish_vertex_event
+  property vertex_event : Proc(T, Nil)?
+  property edge_event : Proc(T, T, Nil)?
+  property tree_edge_event : Proc(T, T, Nil)?
+  property back_edge_event : Proc(T, T, Nil)?
+  property forward_edge_event : Proc(T, T, Nil)?
+  property finish_vertex_event : Proc(T, Nil)?
 
   def at_beginning?
     @color_map.size == 1
@@ -58,7 +66,7 @@ class GraphIterator(T) < GraphVisitor(T)
 
   # executes a callback fn if the callback fn is defined
   private def callback(fn, *args)
-    if e = fn
+    if fn
       fn.call(*args)
     end
   end
@@ -90,10 +98,10 @@ class GraphIterator(T) < GraphVisitor(T)
   end
 end
 
-class BFSIterator(T) < GraphIterator(T)
-  @start_vertex : T
+class BFSIterator(T, Edge) < GraphIterator(T)
+  @start_vertex : T?
 
-  def initialize(@graph : Graph, start = @graph.find { |x| true })
+  def initialize(@graph : Graph(T, Edge), start = @graph.find { |x| true })
     @color_map = Hash(T, Mark).new
     reset
     @start_vertex = start
@@ -110,22 +118,22 @@ end
 
 class Graph(T, Edge)
   def bfs_iterator(v = self.find { |x| true })
-    BFSIterator(T).new(self, v)
+    BFSIterator(T, Edge).new(self, v)
   end
 
   def bfs_search_tree_from(v)
     bfs = bfs_iterator(v)
-    tree = DirectedAdjacencyGraph(T, Set).new
-    bfs.tree_edge_event = ->(from : T, to : T) { tree.add_edge(from, to) }
+    tree = DirectedAdjacencyGraph(T, Set(T)).new
+    bfs.tree_edge_event = ->(from : T, to : T) { tree.add_edge(from, to); nil }
     bfs.set_to_end # does the search
     tree
   end
 end
 
-class DFSIterator(T) < GraphIterator(T)
-  @start_vertex : T
+class DFSIterator(T, Edge) < GraphIterator(T)
+  @start_vertex : T?
 
-  def initialize(@graph, start = @graph.find { |x| true })
+  def initialize(@graph : Graph(T, Edge), start = @graph.find { |x| true })
     @color_map = Hash(T, Mark).new
     reset
     @start_vertex = start
@@ -142,6 +150,6 @@ end
 
 abstract class Graph(T, Edge)
   def dfs_iterator(v = self.find { |x| true })
-    DFSIterator(T).new(self, v)
+    DFSIterator(T, Edge).new(self, v)
   end
 end
