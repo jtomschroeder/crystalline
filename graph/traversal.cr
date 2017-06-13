@@ -133,7 +133,7 @@ class DFSIterator(T, Edge) < GraphIterator(T)
   @start_vertex : T?
 
   def initialize(@graph : Graph(T, Edge), start = @graph.find { |x| true })
-    @waiting = [] of Int32
+    @waiting = [] of T
     @dist_map = Hash(T, T).new(0)
     @color_map = Hash(T, Mark).new(Mark::WHITE)
     @start_vertex = start
