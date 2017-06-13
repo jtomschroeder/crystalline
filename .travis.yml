@@ -1,9 +1,3 @@
-language: objective-c
-before_install: |
-  brew update
-  brew tap manastech/crystal
-install: |
-  brew install crystal
-script:
-  - crystal --version
-  - crystal spec
+language: crystal
+crystal:
+  - latest
