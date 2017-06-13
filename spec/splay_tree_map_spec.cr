@@ -1,4 +1,3 @@
-
 require "spec"
 require "../containers/splay_tree_map"
 
@@ -39,7 +38,6 @@ describe "SplayTreeMap" do
   end
 
   describe "(non-empty)" do
-
     it "should return correct size (unique items)" do
       map = generate_splay(100)
       map[1] = 1 # reassign key 1 to verify push reassigns value

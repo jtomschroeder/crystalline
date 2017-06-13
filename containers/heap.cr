@@ -1,12 +1,11 @@
-
 class Heap(K, V)
-
   def size
     @size
   end
 
   @next : Node(K, V)?
   @comparator : Proc(K, K, Bool)
+
   def initialize(@comparator = ->(x : K, y : K) { (x <=> y) == -1 })
     @size = 0
     @stored = {} of K? => Array(Node(K, V))
@@ -83,7 +82,6 @@ class Heap(K, V)
 
   def merge!(other_heap : Heap(K, V))
     if other_root = other_heap.next_node
-
       # merge @stored hash's
       other_heap.stored.each do |key, value|
         if @stored.has_key? key
@@ -229,7 +227,6 @@ class Heap(K, V)
     def marked?
       @marked == true
     end
-
   end
 
   # make node a child of a parent node
@@ -338,9 +335,7 @@ class Heap(K, V)
     x.parent = nil
     x.marked = false
   end
-
 end
-
 
 class MaxHeap(K, V) < Heap(K, V)
   def initialize
