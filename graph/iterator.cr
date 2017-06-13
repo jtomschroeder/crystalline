@@ -91,6 +91,7 @@ end
 
 class CollectionIterator(T) < AbstractIterator(T)
   getter pos
+  @seq : Array(T)
 
   def initialize(seq)
     @pos = 0
