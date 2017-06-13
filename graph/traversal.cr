@@ -102,11 +102,10 @@ class BFSIterator(T, Edge) < GraphIterator(T)
   @start_vertex : T?
 
   def initialize(@graph : Graph(T, Edge), start = @graph.find { |x| true })
-    @color_map = Hash(T, Mark).new
-    reset
-    @start_vertex = start
     @waiting = [] of T
     @dist_map = Hash(T, T).new(0)
+    @color_map = Hash(T, Mark).new(Mark::WHITE)
+    @start_vertex = start
     set_to_begin
   end
 
@@ -134,11 +133,10 @@ class DFSIterator(T, Edge) < GraphIterator(T)
   @start_vertex : T?
 
   def initialize(@graph : Graph(T, Edge), start = @graph.find { |x| true })
-    @color_map = Hash(T, Mark).new
-    reset
-    @start_vertex = start
-    @waiting = [] of T
+    @waiting = [] of Int32
     @dist_map = Hash(T, T).new(0)
+    @color_map = Hash(T, Mark).new(Mark::WHITE)
+    @start_vertex = start
     set_to_begin
   end
 
