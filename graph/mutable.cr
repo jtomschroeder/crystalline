@@ -1,6 +1,8 @@
 require "./base"
 
 abstract class MutableGraph(T, Edge, EdgeList) < Graph(T, Edge)
+  protected getter vertice_dict
+
   def initialize(*other_graphs)
     @vertice_dict = {} of T => EdgeList
 
@@ -8,6 +10,18 @@ abstract class MutableGraph(T, Edge, EdgeList) < Graph(T, Edge)
       g.each_vertex { |v| add_vertex v }
       g.each_edge { |v, w| add_edge v, w }
     end
+  end
+
+  def ==(x)
+    return false unless x.is_a? MutableGraph
+    # this way looks more correct, but then x.to_adjacency != x
+    # @vertice_dict == x.vertice_dict
+    # so convert each edgelist to array
+    return false unless @vertice_dict.keys == x.vertice_dict.keys
+    each_vertex do |v|
+      return false unless @vertice_dict[v].to_a == x.vertice_dict[v].to_a
+    end
+    true
   end
 
   def each_vertex
