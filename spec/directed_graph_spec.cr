@@ -2,7 +2,7 @@ require "spec"
 require "../graph/adjacency"
 require "set"
 
-def setup
+def setup_directed
   dg = DirectedAdjacencyGraph(Int32, Set(Int32)).new
   [{1, 2}, {2, 3}, {3, 2}, {2, 4}].each { |i| dg.add_edge(i[0], i[1]) }
   dg
@@ -47,7 +47,7 @@ describe "DirectedAdjacencyGraph" do
   end
 
   it "edges" do
-    dg = setup()
+    dg = setup_directed()
     dg.edges.size.should eq 4
     dg.edges.map(&.source).sort.should eq [1, 2, 2, 3]
     dg.edges.map(&.target).sort.should eq [2, 2, 3, 4]
@@ -55,12 +55,12 @@ describe "DirectedAdjacencyGraph" do
   end
 
   it "vertices" do
-    dg = setup()
+    dg = setup_directed()
     dg.vertices.sort.should eq [1, 2, 3, 4]
   end
 
   it "edges_from_to?" do
-    dg = setup()
+    dg = setup_directed()
     dg.has_edge?(1, 2).should be_true
     dg.has_edge?(2, 3).should be_true
     dg.has_edge?(3, 2).should be_true
@@ -72,7 +72,7 @@ describe "DirectedAdjacencyGraph" do
   end
 
   it "remove_edges" do
-    dg = setup()
+    dg = setup_directed()
     dg.remove_edge 1, 2
     dg.has_edge?(1, 2).should be_false
     dg.remove_edge 1, 2
@@ -93,7 +93,7 @@ describe "DirectedAdjacencyGraph" do
   end
 
   it "reverse" do
-    dg = setup()
+    dg = setup_directed()
     reverted = dg.reverse
     dg.each_edge do |u, v|
       reverted.has_edge?(v, u).should be_true

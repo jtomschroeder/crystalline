@@ -2,7 +2,7 @@ require "spec"
 require "../graph/adjacency"
 require "../graph/traversal"
 
-def setup
+def setup_traversal
   edges = [{1, 2}, {2, 3}, {2, 4}, {4, 5}, {1, 6}, {6, 4}]
 
   dg = DirectedAdjacencyGraph(Int32, Array(Int32)).new
@@ -18,7 +18,7 @@ end
 
 describe "Traversal" do
   it "bfs_iterator_creation" do
-    dg, bfs, dfs, ug = setup()
+    dg, bfs, dfs, ug = setup_traversal()
     bfs.at_beginning?.should be_true
     bfs.at_end?.should be_false
     bfs.start_vertex.should eq 1
@@ -26,7 +26,7 @@ describe "Traversal" do
   end
 
   it "bfs_visiting" do
-    dg, bfs, dfs, ug = setup()
+    dg, bfs, dfs, ug = setup_traversal()
     expected = [1, 2, 6, 3, 4, 5]
     bfs.to_a.should eq expected
     ug.bfs_iterator.to_a.should eq expected
@@ -35,7 +35,7 @@ describe "Traversal" do
   end
 
   it "bfs_event_handlers" do
-    dg, bfs, dfs, ug = setup()
+    dg, bfs, dfs, ug = setup_traversal()
 
     expected = "examine_vertex : 1
 examine_edge   : 1-2
@@ -79,14 +79,14 @@ finished_vertex: 5
   end
 
   it "dfs_visiting" do
-    dg, bfs, dfs, ug = setup()
+    dg, bfs, dfs, ug = setup_traversal()
     dg.dfs_iterator.to_a.should eq [1, 6, 4, 5, 2, 3]
     dg.dfs_iterator(1).to_a.should eq [1, 6, 4, 5, 2, 3]
     dg.dfs_iterator(2).to_a.should eq [2, 4, 5, 3]
   end
 
   it "dfs_event_handlers" do
-    dg, bfs, dfs, ug = setup()
+    dg, bfs, dfs, ug = setup_traversal()
 
     expected = "examine_vertex : 1
 examine_edge   : 1-2
@@ -130,7 +130,7 @@ finished_vertex: 2
   end
 
   it "bfs_search_tree" do
-    dg, bfs, dfs, ug = setup()
+    dg, bfs, dfs, ug = setup_traversal()
     dg.bfs_search_tree_from(1).edges.sort.sum("", &.to_s).should eq "(1-2)(1-6)(2-3)(2-4)(4-5)"
   end
 end

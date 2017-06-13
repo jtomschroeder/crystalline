@@ -1,7 +1,7 @@
 require "../containers/heap"
 require "spec"
 
-def setup
+def setup_heap
   random_array = [] of Int32
   num_items = 100
   num_items.times { random_array << rand(num_items) }
@@ -38,18 +38,18 @@ describe "Heap" do
 
   describe "(non-empty)" do
     it "should display the correct size" do
-      heap, random_array, num_items = setup()
+      heap, random_array, num_items = setup_heap()
       heap.size.should eq(num_items)
     end
 
     it "should have a next value" do
-      heap, random_array, num_items = setup()
+      heap, random_array, num_items = setup_heap()
       heap.next.should be_truthy
       heap.next_key.should be_truthy
     end
 
     it "should delete random keys" do
-      heap, random_array, num_items = setup()
+      heap, random_array, num_items = setup_heap()
       heap.delete(random_array[0]).should eq(random_array[0])
       heap.delete(random_array[1]).should eq(random_array[1])
 
@@ -63,7 +63,7 @@ describe "Heap" do
     end
 
     it "should delete all keys" do
-      heap, random_array, num_items = setup()
+      heap, random_array, num_items = setup_heap()
       ordered = [] of Int32
       random_array.size.times do |t|
         if i = heap.delete(random_array[t])
@@ -75,7 +75,7 @@ describe "Heap" do
     end
 
     it "should be in max->min order" do
-      heap, random_array, num_items = setup()
+      heap, random_array, num_items = setup_heap()
       ordered = [] of Int32
       until heap.empty?
         if i = heap.max!
@@ -128,7 +128,7 @@ describe "Heap" do
     end
 
     it "should let you merge with another heap" do
-      heap, random_array, num_items = setup()
+      heap, random_array, num_items = setup_heap()
       numbers = [1, 2, 3, 4, 5, 6, 7, 8]
       otherheap = MaxHeap(Int32, Int32).new
       numbers.each { |n| otherheap << n }
@@ -147,7 +147,7 @@ describe "Heap" do
 
     describe "min-heap" do
       it "should be in min->max order" do
-        heap, random_array, num_items = setup()
+        heap, random_array, num_items = setup_heap()
         heap = MinHeap(Int32, Int32).new
         random_array.each { |n| heap << n }
         ordered = [] of Int32

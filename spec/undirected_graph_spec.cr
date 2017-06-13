@@ -2,7 +2,7 @@ require "spec"
 require "../graph/adjacency"
 require "set"
 
-def setup
+def setup_undirected
   dg = AdjacencyGraph(Int32, Set(Int32)).new
   [{1, 2}, {2, 3}, {3, 2}, {2, 4}].each { |i| dg.add_edge(i[0], i[1]) }
   dg
@@ -44,19 +44,19 @@ describe "UndirectedAdjacencyGraph" do
   end
 
   it "edges" do
-    dg = setup()
+    dg = setup_undirected()
     dg.edges.size.should eq 3
     edges = [{1, 2}, {2, 3}, {2, 4}].map { |i| UndirectedEdge(Int32).new(i[0], i[1]) }
     dg.edges.sort.should eq edges
   end
 
   it "vertices" do
-    dg = setup()
+    dg = setup_undirected()
     dg.vertices.sort.should eq [1, 2, 3, 4]
   end
 
   it "edges_from_to?" do
-    dg = setup()
+    dg = setup_undirected()
     dg.has_edge?(1, 2).should be_true
     dg.has_edge?(2, 3).should be_true
     dg.has_edge?(3, 2).should be_true
@@ -68,7 +68,7 @@ describe "UndirectedAdjacencyGraph" do
   end
 
   it "remove_edges" do
-    dg = setup()
+    dg = setup_undirected()
     dg.remove_edge 1, 2
     dg.has_edge?(1, 2).should be_false
     dg.remove_edge 1, 2
@@ -92,7 +92,7 @@ describe "UndirectedAdjacencyGraph" do
   end
 
   it "reverse" do
-    dg = setup()
+    dg = setup_undirected()
     dg.reverse.should eq dg
   end
 end
