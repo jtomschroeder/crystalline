@@ -1,15 +1,14 @@
-
 require "spec"
 require "../containers/rb_tree_map"
 
-def setup_tree()
+def setup_rbtree
   tree = RBTreeMap(Int32, Int32).new
   num_items = 25
   random_array = Array.new(num_items) { rand(num_items) }
   random_array.each { |x| tree[x] = x * 2 }
   {tree, random_array}
 end
-    
+
 describe "RBTreeMap" do
   describe "(empty)" do
     it "should let you push stuff in" do
@@ -46,35 +45,34 @@ describe "RBTreeMap" do
   end
 
   describe "(non-empty)" do
-
     it "should return correct size (uniqify items first)" do
-      tree, random_array = setup_tree()
+      tree, random_array = setup_rbtree()
 
       tree.empty?.should be_false
       tree.size.should eq(random_array.uniq!.size)
     end
 
     it "should return correct max and min" do
-      tree, random_array = setup_tree()
+      tree, random_array = setup_rbtree()
 
       tree.min_key.should eq(random_array.min)
       tree.max_key.should eq(random_array.max)
     end
 
     it "should not #has_key? keys it doesn't have" do
-      tree, random_array = setup_tree()
+      tree, random_array = setup_rbtree()
 
       tree.has_key?(100000).should be_false
     end
 
     it "should #has_key? keys it does have" do
-      tree, random_array = setup_tree()
+      tree, random_array = setup_rbtree()
 
       tree.has_key?(random_array[0]).should be_true
     end
 
     it "should remove all keys" do
-      tree, random_array = setup_tree()
+      tree, random_array = setup_rbtree()
       random_array.uniq!.each do |key|
         tree.has_key?(key).should eq(true)
         tree.delete(key)
@@ -84,7 +82,7 @@ describe "RBTreeMap" do
     end
 
     it "should delete_min keys correctly" do
-      tree, random_array = setup_tree()
+      tree, random_array = setup_rbtree()
 
       random_array = random_array.uniq!.sort!.reverse
       until tree.empty?
@@ -96,7 +94,7 @@ describe "RBTreeMap" do
     end
 
     it "should delete_max keys correctly" do
-      tree, random_array = setup_tree()
+      tree, random_array = setup_rbtree()
 
       random_array.uniq!.sort!
       until tree.empty?
@@ -108,7 +106,7 @@ describe "RBTreeMap" do
     end
 
     it "should let you iterate with #each" do
-      tree, random_array = setup_tree()
+      tree, random_array = setup_rbtree()
 
       i = 0
       random_array.uniq!.sort!

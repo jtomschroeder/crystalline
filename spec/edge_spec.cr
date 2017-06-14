@@ -1,4 +1,3 @@
-
 require "spec"
 require "../graph/base"
 

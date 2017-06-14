@@ -1,8 +1,7 @@
-
 require "../containers/priority_queue"
 require "spec"
 
-def setup
+def setup_priority
   pq = PriorityQueue(String).new
   pq.push("Alaska", 50)
   pq.push("Delaware", 30)
@@ -11,7 +10,6 @@ def setup
 end
 
 describe "PriorityQueue" do
-
   describe "(empty priority queue)" do
     it "should return 0 for size and be empty" do
       pq = PriorityQueue(Int32).new
@@ -47,9 +45,8 @@ describe "PriorityQueue" do
   end
 
   describe "(non-empty priority queue)" do
-
     it "should next/pop the highest priority" do
-      pq = setup
+      pq = setup_priority
       pq.next.should eq("Alaska")
       pq.size.should eq(3)
       pq.pop.should eq("Alaska")
@@ -57,18 +54,18 @@ describe "PriorityQueue" do
     end
 
     it "should not be empty" do
-      pq = setup
+      pq = setup_priority
       pq.empty?.should be_false
     end
 
     it "should has_priority? priorities it has" do
-      pq = setup
+      pq = setup_priority
       pq.has_priority?(50).should be_true
       pq.has_priority?(10).should be_false
     end
 
     it "should return nil after popping everything" do
-      pq = setup
+      pq = setup_priority
       3.times do
         pq.pop
       end
@@ -76,7 +73,7 @@ describe "PriorityQueue" do
     end
 
     it "should delete things it has and not things it doesn't" do
-      pq = setup
+      pq = setup_priority
       pq.delete(50).should eq("Alaska")
       pq.delete(10).should eq(nil)
     end

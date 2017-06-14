@@ -1,20 +1,20 @@
-
 require "spec"
 require "../graph/iterator"
 
-def new_collection_iterator; CollectionIterator(Int32).new(1..5); end
+def new_collection_iterator
+  CollectionIterator(Int32).new(1..5)
+end
 
 describe "Iterator" do
-
   it "enumerable" do
     s = new_collection_iterator
-    s.map { |x| x * 2 }.entries.should eq [2, 4, 6, 8, 10]
+    s.map { |x| x * 2 }.to_a.should eq [2, 4, 6, 8, 10]
     s.select { |x| x % 2 == 0 }.should eq [2, 4]
   end
 
   it "collection_Iterator" do
     s = new_collection_iterator
-    s.entries.should eq [1, 2, 3, 4, 5]
+    s.to_a.should eq [1, 2, 3, 4, 5]
     s.at_end?.should be_true
     expect_raises(AbstractIterator::EndOfIteratorException) { s.forward }
     s.backward.should eq 5
@@ -42,5 +42,4 @@ describe "Iterator" do
     s.move_backward_until { |x| x < 2 }.should eq 1
     s.move_backward_until { |x| x < 0 }.should eq nil
   end
-
 end

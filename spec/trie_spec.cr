@@ -1,4 +1,3 @@
-
 require "spec"
 require "../containers/trie"
 
@@ -10,7 +9,7 @@ def setup_trie
   trie.push("Hello, bob", "World")
   trie
 end
-    
+
 describe "Trie" do
   describe "(empty)" do
     it "should not get or has_key?" do

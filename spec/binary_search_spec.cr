@@ -1,10 +1,8 @@
-
 require "spec"
 require "../algorithms/search"
 
 describe "Binary Search" do
-
-  fibonacci_array = [0,1,1,2,3,5,8,13]
+  fibonacci_array = [0, 1, 1, 2, 3, 5, 8, 13]
   float_array = [0.1, 1.2, 2.3, 3.4, 4.5, 5.6, 6.7, 7.8, 8.9]
   alphabet_array = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
   string_array = %w(Algeria Belgium Canada Denmark England Fiji Ghana Iceland Japan)
@@ -73,9 +71,7 @@ describe "Binary Search" do
       value = Algorithms::Search.binary_search(string_array, "Japan")
       value.should eq(8)
     end
-
   end
-  
   describe "item not found" do
     it "returns nil" do
       value = Algorithms::Search.binary_search(fibonacci_array, 763)
@@ -114,5 +110,4 @@ describe "Binary Search" do
       value.should eq(nil)
     end
   end
-
 end
