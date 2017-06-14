@@ -6,7 +6,6 @@ crystalline
 `crystalline` is a collection of containers & algorithms for the [crystal](https://github.com/manastech/crystal) programming language.
 
 - Containers
-  - Deque
   - Stack
   - Queue
   - Red-Black Tree
@@ -22,4 +21,4 @@ Pull requests are welcome! :)
 - [kanwei's Algorithms](https://github.com/kanwei/algorithms)
 - Ruby Graph Library (RGL)
 
-`crystalline` Copyright (c) 2016 Tom Schroeder, released under the MIT license
+`crystalline` Copyright (c) 2017 Tom Schroeder, released under the MIT license
