@@ -1,12 +1,12 @@
 require "./common"
 
-class Trie
+class Trie(T)
   @root : Node?
 
   def initialize
   end
 
-  def push(key : String, value : String)
+  def push(key : String, value : T)
     unless key.empty?
       @root = push_recursive(@root, key, 0, value)
       value
@@ -17,17 +17,17 @@ class Trie
     push(key, value)
   end
 
-  private def push_recursive(node : Node?, string, index, value)
-    char = string[index]
+  private def push_recursive(node : Node?, key, index, value)
+    char = key[index]
     node ||= Node.new(char, value)
     node_char = node.char
 
     if char < node_char
-      node.left = push_recursive(node.left, string, index, value)
+      node.left = push_recursive(node.left, key, index, value)
     elsif char > node_char
-      node.right = push_recursive(node.right, string, index, value)
-    elsif index < string.size - 1
-      node.mid = push_recursive(node.mid, string, index + 1, value)
+      node.right = push_recursive(node.right, key, index, value)
+    elsif index < key.size - 1
+      node.mid = push_recursive(node.mid, key, index + 1, value)
     else
       node.end = true
       node.value = value
@@ -48,17 +48,17 @@ class Trie
     get key
   end
 
-  private def get_recursive(node : Node?, string, index)
+  private def get_recursive(node : Node?, key, index)
     if node
-      char = string[index]
+      char = key[index]
       node_char = node.char
 
       if char < node_char
-        return get_recursive(node.left, string, index)
+        return get_recursive(node.left, key, index)
       elsif char > node_char
-        return get_recursive(node.right, string, index)
-      elsif index < string.size - 1
-        return get_recursive(node.mid, string, index + 1)
+        return get_recursive(node.right, key, index)
+      elsif index < key.size - 1
+        return get_recursive(node.mid, key, index + 1)
       else
         return node.last? ? node : nil
       end
@@ -122,12 +122,13 @@ class Trie
     property :end # not sure if this is a good name
 
 
-    def initialize(@char : Char, @value : String)
+    def initialize(@char : Char, @value : (String | Array(String)))
       @end = false
     end
 
     def last?
       @end == true
     end
+
   end
 end
