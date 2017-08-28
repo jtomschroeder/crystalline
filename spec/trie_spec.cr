@@ -16,6 +16,7 @@ def setup_generic_trie
   trie.push("Hilly", ["World"])
   trie.push("Hello, brother", ["World"])
   trie.push("Hello, bob", ["World"])
+  trie
 end
 
 describe "Trie" do
@@ -90,10 +91,6 @@ describe "Trie" do
     end
 
     describe "Trie(Array(String))" do
-      it "should allow generic values" do
-        setup_generic_trie()
-      end
-
       it "should not get or has_key?" do
         trie = Trie(Array(String)).new
         trie.get("anything").should be_nil
@@ -106,61 +103,60 @@ describe "Trie" do
         trie.longest_prefix("an*thing").should eq("")
       end
 
-#      it "should handle empty strings" do
-#        trie = Trie(Array(String)).new
-#        trie.push("", "").should be_nil
-#        trie.get("").should be_nil
-#        trie.has_key?("").should be_false
-#        trie.longest_prefix("").should eq("")
-#      end
-#    end
-#
-#    describe "(non-empty)" do
-#      it "should has_key? keys it has" do
-#        trie = setup_generic_trie()
-#        trie.has_key?("Hello").should be_true
-#        trie.has_key?("Hello, brother").should be_true
-#        trie.has_key?("Hello, bob").should be_true
-#      end
-#
-#      it "should not has_key? keys it doesn't have" do
-#        trie = setup_generic_trie()
-#        trie.has_key?("Nope").should be_false
-#      end
-#
-#      it "should get values" do
-#        trie = setup_generic_trie()
-#        trie.get("Hello").should eq("World")
-#      end
-#
-#      it "should handle empty strings" do
-#        trie = Trie(Array(String)).new
-#        trie.push("", "").should be_nil
-#        trie.get("").should be_nil
-#        trie.has_key?("").should be_false
-#        trie.longest_prefix("").should eq("")
-#      end
-#
-#      it "should overwrite values" do
-#        trie = setup_generic_trie()
-#        trie.push("Hello", ["John"])
-#        trie.get("Hello").should eq("John")
-#      end
-#
-#      it "should return longest prefix" do
-#        trie = setup_generic_trie()
-#        trie.longest_prefix("Hello, brandon").should eq(["Hello"])
-#        trie.longest_prefix("Hel").should eq([""])
-#        trie.longest_prefix("Hello").should eq("Hello")
-#        trie.longest_prefix("Hello, bob").should eq("Hello, bob")
-#      end
-#
-#      it "should match wildcards" do
-#        trie = setup_generic_trie()
-#        trie.wildcard("H*ll.").should eq(["Hello", "Hilly"])
-#        trie.wildcard("Hel").should eq([] of String)
-#      end
+      it "should handle empty strings" do
+        trie = Trie(Array(String)).new
+        trie.push("", [""]).should be_nil
+        trie.get("").should be_nil
+        trie.has_key?("").should be_false
+        trie.longest_prefix("").should eq("")
+      end
     end
 
+    describe "(non-empty)" do
+      it "should has_key? keys it has" do
+        trie = setup_generic_trie()
+        trie.has_key?("Hello").should be_true
+        trie.has_key?("Hello, brother").should be_true
+        trie.has_key?("Hello, bob").should be_true
+      end
+
+      it "should not has_key? keys it doesn't have" do
+        trie = setup_generic_trie()
+        trie.has_key?("Nope").should be_false
+      end
+
+      it "should get values" do
+        trie = setup_generic_trie()
+        trie.get("Hello").should eq(["World"])
+      end
+
+      it "should handle empty strings" do
+        trie = Trie(Array(String)).new
+        trie.push("", [""]).should be_nil
+        trie.get("").should be_nil
+        trie.has_key?("").should be_false
+        trie.longest_prefix("").should eq("")
+      end
+
+      it "should overwrite values" do
+        trie = setup_generic_trie()
+        trie.push("Hello", ["John"])
+        trie.get("Hello").should eq(["John"])
+      end
+
+      it "should return longest prefix" do
+        trie = setup_generic_trie()
+        trie.longest_prefix("Hello, brandon").should eq("Hello")
+        trie.longest_prefix("Hel").should eq("")
+        trie.longest_prefix("Hello").should eq("Hello")
+        trie.longest_prefix("Hello, bob").should eq("Hello, bob")
+      end
+
+      it "should match wildcards" do
+        trie = setup_generic_trie()
+        trie.wildcard("H*ll.").should eq(["Hello", "Hilly"])
+        trie.wildcard("Hel").should eq([] of String)
+      end
+    end
   end
 end

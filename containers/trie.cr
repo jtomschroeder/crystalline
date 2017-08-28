@@ -1,7 +1,25 @@
 require "./common"
 
 class Trie(T)
-  @root : Node?
+  @root : Node(T)?
+
+  class Node(T)
+    property char
+    property value
+    property left : Node(T)?
+    property mid : Node(T)?
+    property right : Node(T)?
+    property :end # not sure if this is a good name
+
+
+    def initialize(@char : Char, @value : T)
+      @end = false
+    end
+
+    def last?
+      @end == true
+    end
+  end
 
   def initialize
   end
@@ -19,7 +37,7 @@ class Trie(T)
 
   private def push_recursive(node : Node?, key, index, value)
     char = key[index]
-    node ||= Node.new(char, value)
+    node ||= Node(T).new(char, value)
     node_char = node.char
 
     if char < node_char
@@ -112,23 +130,4 @@ class Trie(T)
     arr
   end
 
-  # private
-  class Node
-    property char
-    property value
-    property left : Node?
-    property mid : Node?
-    property right : Node?
-    property :end # not sure if this is a good name
-
-
-    def initialize(@char : Char, @value : (String | Array(String)))
-      @end = false
-    end
-
-    def last?
-      @end == true
-    end
-
-  end
 end
