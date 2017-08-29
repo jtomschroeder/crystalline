@@ -1,12 +1,12 @@
 require "./common"
 
-class Trie
-  @root : Node?
+class Trie(T)
+  @root : Node(T)?
 
   def initialize
   end
 
-  def push(key : String, value : String)
+  def push(key : String, value : T)
     unless key.empty?
       @root = push_recursive(@root, key, 0, value)
       value
@@ -19,7 +19,7 @@ class Trie
 
   private def push_recursive(node : Node?, string, index, value)
     char = string[index]
-    node ||= Node.new(char, value)
+    node ||= Node(T).new(char, value)
     node_char = node.char
 
     if char < node_char
@@ -113,16 +113,16 @@ class Trie
   end
 
   # private
-  class Node
+  class Node(T)
     property char
     property value
-    property left : Node?
-    property mid : Node?
-    property right : Node?
+    property left : Node(T)?
+    property mid : Node(T)?
+    property right : Node(T)?
     property :end # not sure if this is a good name
 
 
-    def initialize(@char : Char, @value : String)
+    def initialize(@char : Char, @value : T)
       @end = false
     end
 
