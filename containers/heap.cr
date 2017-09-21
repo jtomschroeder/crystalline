@@ -13,6 +13,7 @@ class Heap(K, V)
 
   def push(key : K, value = key)
     node = Node(K, V).new(key, value)
+
     # Add new node to the left of the @next node
     if nxt = @next
       node.right = nxt
@@ -25,22 +26,12 @@ class Heap(K, V)
     else
       @next = node
     end
-    @size += 1
 
-    arr = [] of V
-    if nxt = @next
-      w = nxt.right
-      until w == @next
-        if w
-          arr << w.value
-          w = w.right
-        end
-      end
-      arr << nxt.value
-    end
+    @size += 1
 
     @stored[key] ||= [] of Node(K, V)
     @stored[key] << node
+
     value
   end
 
@@ -72,6 +63,7 @@ class Heap(K, V)
   end
 
   protected getter stored
+
   protected def next_node
     @next
   end
@@ -149,11 +141,13 @@ class Heap(K, V)
         @next = nxt.right
       end
     end
+
     consolidate
 
     unless @stored[popped.key].delete(popped)
       raise "Couldn't delete node from stored nodes hash"
     end
+
     @size -= 1
 
     popped.value
