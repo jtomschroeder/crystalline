@@ -185,25 +185,30 @@ class RBTreeMap(K, V)
     {nil, nil} # FIXME: should be unreachable
   end
 
-  def each
-    node = @root
-    return unless node
+  private macro make_iterator(name, from, to)
+    def {{name}}
+      node = @root
+      return unless node
 
-    stack = Stack(Node(K, V)).new
+      stack = Stack(Node(K, V)).new
 
-    # In-order traversal (keys in ascending order)
-    while !stack.empty? || !node.nil?
-      if node
-        stack.push(node)
-        node = node.left
-      else
-        if node = stack.pop
-          yield(node.key, node.value)
-          node = node.right
+      # In-order traversal (keys in ascending order)
+      while !stack.empty? || !node.nil?
+        if node
+          stack.push(node)
+          node = node.{{from}}
+        else
+          if node = stack.pop
+            yield(node.key, node.value)
+            node = node.{{to}}
+          end
         end
       end
     end
   end
+  
+  make_iterator each, left, right
+  make_iterator reverse_each, right, left
 
   # DEBUG
   def print_levels
