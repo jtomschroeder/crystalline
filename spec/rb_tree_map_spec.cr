@@ -116,5 +116,17 @@ describe "RBTreeMap" do
         i += 1
       end
     end
+
+    it "should let you iterate with #reverse_each" do
+      tree, random_array = setup_rbtree()
+
+      i = 0
+      random_array.uniq!.sort!.reverse!
+      tree.reverse_each do |key, value|
+        key.should eq(random_array[i])
+        value.should eq(random_array[i] * 2)
+        i += 1
+      end
+    end
   end
 end
