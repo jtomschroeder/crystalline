@@ -1,4 +1,3 @@
-require "./deque"
 require "./common"
 
 class Stack(T)
