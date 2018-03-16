@@ -1,15 +1,13 @@
 module Algorithms::Search
-  def self.kmp_table(patt : String)
+  private def self.kmp_table(patt : String)
     tbl = Array.new(patt.size + 1, -1)
     k = -1
-    i = 1
-    while i <= patt.size
+    (1..patt.size).each do |i|
       while k >= 0 && patt[k] != patt[i-1]
         k = tbl[k]
       end
       k += 1
       tbl[i] = k
-      i += 1
     end
     tbl
   end
@@ -18,9 +16,8 @@ module Algorithms::Search
     return nil unless text && patt
     matches = [] of Int32
     k = 0
-    i = 1
     tbl = kmp_table(patt)
-    while i <= text.size
+    (1..text.size).each do |i|
       while k >= 0 && patt[k] != text[i-1]
         k = tbl[k]
       end
@@ -29,7 +26,6 @@ module Algorithms::Search
         matches << i - patt.size
         k = tbl[k]
       end
-      i += 1
     end
     matches
   end
