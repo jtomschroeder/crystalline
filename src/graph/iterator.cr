@@ -36,6 +36,7 @@ abstract class AbstractIterator(T)
   protected def basic_current
     backward; forward
   end
+
   protected def basic_peek
     forward; backward
   end
@@ -126,6 +127,7 @@ class CollectionIterator(T) < AbstractIterator(T)
   protected def basic_current
     @seq[@pos]
   end
+
   protected def basic_peek
     @seq[@pos + 1]
   end

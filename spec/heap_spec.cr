@@ -1,5 +1,4 @@
-require "../containers/heap"
-require "spec"
+require "./spec_helper"
 
 def setup_heap
   random_array = [] of Int32

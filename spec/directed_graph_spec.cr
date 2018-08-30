@@ -1,6 +1,4 @@
-require "spec"
-require "../graph/adjacency"
-require "set"
+require "./spec_helper"
 
 def setup_directed
   dg = DirectedAdjacencyGraph(Int32, Set(Int32)).new

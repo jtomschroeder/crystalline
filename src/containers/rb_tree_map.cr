@@ -206,7 +206,7 @@ class RBTreeMap(K, V)
       end
     end
   end
-  
+
   make_iterator each, left, right
   make_iterator reverse_each, right, left
 

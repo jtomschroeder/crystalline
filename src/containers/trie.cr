@@ -121,7 +121,6 @@ class Trie(T)
     property right : Node(T)?
     property :end # not sure if this is a good name
 
-
     def initialize(@char : Char, @value : T)
       @end = false
     end

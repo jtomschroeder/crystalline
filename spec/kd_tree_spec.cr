@@ -1,5 +1,4 @@
-require "spec"
-require "../containers/kd_tree"
+require "./spec_helper"
 
 describe "KDTree" do
   it "should function with pairs" do

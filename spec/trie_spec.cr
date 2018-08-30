@@ -1,5 +1,4 @@
-require "spec"
-require "../containers/trie"
+require "./spec_helper"
 
 def setup_trie
   trie = Trie(String).new

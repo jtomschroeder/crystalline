@@ -1,5 +1,4 @@
-require "spec"
-require "../algorithms/kmp_search"
+require "./spec_helper"
 
 describe "KMP Search" do
   describe "finds some pattern" do

@@ -3,7 +3,7 @@ module Algorithms::Search
     tbl = Array.new(patt.size + 1, -1)
     k = -1
     (1..patt.size).each do |i|
-      while k >= 0 && patt[k] != patt[i-1]
+      while k >= 0 && patt[k] != patt[i - 1]
         k = tbl[k]
       end
       k += 1
@@ -18,7 +18,7 @@ module Algorithms::Search
     k = 0
     tbl = kmp_table(patt)
     (1..text.size).each do |i|
-      while k >= 0 && patt[k] != text[i-1]
+      while k >= 0 && patt[k] != text[i - 1]
         k = tbl[k]
       end
       k += 1

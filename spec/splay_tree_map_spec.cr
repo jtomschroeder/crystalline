@@ -1,5 +1,4 @@
-require "spec"
-require "../containers/splay_tree_map"
+require "./spec_helper"
 
 def generate_splay(num_items : Int32)
   map = SplayTreeMap(Int32, Int32).new
