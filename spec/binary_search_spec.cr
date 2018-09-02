@@ -1,5 +1,4 @@
-require "spec"
-require "../algorithms/search"
+require "./spec_helper"
 
 describe "Binary Search" do
   fibonacci_array = [0, 1, 1, 2, 3, 5, 8, 13]

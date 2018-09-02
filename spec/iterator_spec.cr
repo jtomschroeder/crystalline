@@ -1,5 +1,4 @@
-require "spec"
-require "../graph/iterator"
+require "./spec_helper"
 
 def new_collection_iterator
   CollectionIterator(Int32).new(1..5)

@@ -1,5 +1,4 @@
-require "../containers/priority_queue"
-require "spec"
+require "./spec_helper"
 
 def setup_priority
   pq = PriorityQueue(String).new

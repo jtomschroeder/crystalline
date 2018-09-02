@@ -1,5 +1,4 @@
-require "spec"
-require "../containers/stack"
+require "./spec_helper"
 
 describe "Stack" do
   describe "(empty)" do

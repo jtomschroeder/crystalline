@@ -1,5 +1,4 @@
-require "spec"
-require "../containers/queue"
+require "./spec_helper"
 
 describe "Queue" do
   describe "(empty)" do

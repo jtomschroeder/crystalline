@@ -1,5 +1,4 @@
-require "spec"
-require "../graph/base"
+require "./spec_helper"
 
 describe "Edges" do
   it "should support directed edges" do

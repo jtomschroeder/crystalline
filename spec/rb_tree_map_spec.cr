@@ -1,5 +1,4 @@
-require "spec"
-require "../containers/rb_tree_map"
+require "./spec_helper"
 
 def setup_rbtree
   tree = RBTreeMap(Int32, Int32).new

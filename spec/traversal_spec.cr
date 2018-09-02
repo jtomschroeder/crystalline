@@ -1,6 +1,4 @@
-require "spec"
-require "../graph/adjacency"
-require "../graph/traversal"
+require "./spec_helper"
 
 def setup_traversal
   edges = [{1, 2}, {2, 3}, {2, 4}, {4, 5}, {1, 6}, {6, 4}]
