@@ -43,12 +43,12 @@ module Crystalline::Containers
 
     def [](key : K)
       get key
-	end
-	
-	def <<(key : K)
-		push key
-		return self
-	end
+    end
+
+    def <<(key : K)
+      push key
+      return self
+    end
 
     private def get_recursive(node : Node?, key : K)
       if node
@@ -58,6 +58,14 @@ module Crystalline::Containers
         when  1 then return get_recursive(node.right, key)
         end
       end
+    end
+
+    def first
+      min_key
+    end
+
+    def last
+      max_key
     end
 
     def min_key

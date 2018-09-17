@@ -57,30 +57,30 @@ module Crystalline::Containers
     end
 
     def min_key
-	  n = @alt_impl.min_key
-	  if n.nil?
-		nil
-	  else
-		n.key
-	  end
+      n = @alt_impl.min_key
+      if n.nil?
+        nil
+      else
+        n.key
+      end
     end
 
     def max_key
-		n = @alt_impl.max_key
-		if n.nil?
-		  nil
-		else
-		  n.key
-		end
+      n = @alt_impl.max_key
+      if n.nil?
+        nil
+      else
+        n.key
+      end
     end
 
     def delete(key : K)
-      n=@alt_impl.delete(Pair(K, V).new(key, nil))
-	  if n.nil?
-		nil
-	  else
-		n.key
-	  end
+      n = @alt_impl.delete(Pair(K, V).new(key, nil))
+      if n.nil?
+        nil
+      else
+        n.key
+      end
     end
 
     def delete_min
