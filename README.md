@@ -2,10 +2,10 @@ crystalline
 ===========
 
 [![Built with
-Crystal](https://img.shields.io/badge/built%20with-crystal-000000.svg?style=flat-square)](https://crystal-lang.org/)
+Crystal](https://img.shields.io/badge/built%20with-crystal-000000.svg)](https://crystal-lang.org/)
 [![Build
 Status](https://travis-ci.org/jtomschroeder/crystalline.svg)](https://travis-ci.org/jtomschroeder/crystalline)
-[![MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://en.wikipedia.org/wiki/MIT_License)
+[![MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://en.wikipedia.org/wiki/MIT_License)
 
 Collection of Containers and Algorithms.
 
@@ -19,60 +19,22 @@ dependencies:
     github: jtomschroeder/crystalline
 ```
 
-## Usage
+## Content
 
-* [Algorithms](#algorithms)
-  - [KMP Search](#kmp-search)
-  - [Search](#search)
-* [Containers](#containers)
-  - [Heap](#heap)
-  - [KD Tree](#kd-tree)
-  - [Priority Queue](#priority-queue)
-  - [Queue](#queue)
-  - [RB Tree Map]()
-  - [Splay Tree Map]()
-  - [Stack]()
-  - [Suffix Array]()
-  - [Trie]()
-* [Graph]()
-
-### Algorithms
-
-```crystal
-require "crystalline/algorithms/*"
-```
-
-#### KMP Search
-
-```crystal
-Crystalline::Algorithms::Search.kmp_search("the quick brown fox jumped over the lazy dog.", dog)
-# =>
-
-include Crystalline::Algorithms::Search
-
-kmp_search("abcddcba", "cdd") # =>
-
-```
-
-#### Search
-
-```crystal
-array = [0,1,2,3,4,5,6,7,8,9]
-Crystalline::Algorithms::Search.binary_search(array, 5)
-# => 5
-
-Crystalline::Algorithms::Search.binary_search(array, 10)
-# => nil
-```
-
-### Containers
-
-```crystal
-require "crystalline/containers/*"
-```
-
-### Graph
-
+- Algorithms
+  - KMP-Search
+  - Search
+- Containers
+  - Heap
+  - KD-Tree
+  - Queue
+  - Priority Queue
+  - RB Tree Map
+  - Splay Tree Map
+  - Stack
+  - Suffix Array
+  - Trie
+- Graph
 
 ## Contributing
 
