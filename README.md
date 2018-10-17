@@ -1,24 +1,45 @@
 crystalline
 ===========
 
-[![Build Status](https://travis-ci.org/jtomschroeder/crystalline.svg)](https://travis-ci.org/jtomschroeder/crystalline)
+[![Built with
+Crystal](https://img.shields.io/badge/built%20with-crystal-000000.svg)](https://crystal-lang.org/)
+[![Build
+Status](https://travis-ci.org/jtomschroeder/crystalline.svg)](https://travis-ci.org/jtomschroeder/crystalline)
+[![MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://en.wikipedia.org/wiki/MIT_License)
 
-`crystalline` is a collection of containers & algorithms for the [crystal](https://github.com/manastech/crystal) programming language.
+Collection of Containers and Algorithms.
 
+## Installation
+
+Add this to your application's `shard.yml`:
+
+```yaml
+dependencies:
+  crystalline:
+    github: jtomschroeder/crystalline
+```
+
+## Content
+
+- Algorithms
+  - KMP-Search
+  - Search
 - Containers
-  - Stack
+  - Heap
+  - KD-Tree
   - Queue
-  - Red-Black Tree
-  - Splay Tree
-  - Trie
+  - Priority Queue
+  - RB Tree Map
+  - Splay Tree Map
+  - Stack
   - Suffix Array
-  - _k_-d Tree
-- Graphs
+  - Trie
+- Graph
 
-Pull requests are welcome! :)
+## Contributing
 
-#### Credits
-- [kanwei's Algorithms](https://github.com/kanwei/algorithms)
-- Ruby Graph Library (RGL)
-
-`crystalline` is released under the MIT license.
+1. Fork it (<https://github.com/jtomschroeder/crystalline/fork>)
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
