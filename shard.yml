@@ -3,6 +3,6 @@ version: 0.1.0
 
 description: Collection of Containers and Algorithms
 
-crystal: 0.26.1
+crystal: 0.31.1
 
 licence: MIT

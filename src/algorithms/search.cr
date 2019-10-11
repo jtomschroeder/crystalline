@@ -6,7 +6,7 @@ module Crystalline
       low = 0
       high = container.size - 1
       while low <= high
-        mid = (low + high) / 2
+        mid = (low + high) // 2
         if container[mid] < item
           low = mid + 1
         elsif container[mid] > item
