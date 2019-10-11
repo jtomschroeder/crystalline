@@ -33,7 +33,7 @@ module Crystalline::Containers
       axis = depth % @dimensions
 
       points.sort! { |a, b| a[1][axis] <=> b[1][axis] }
-      median = points.size / 2
+      median = points.size // 2
 
       node = Node.new(points[median][0], points[median][1])
       node.left = build_tree(points[0...median], depth + 1)

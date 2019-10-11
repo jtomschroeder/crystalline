@@ -14,7 +14,7 @@ module Crystalline::Containers
       substring_length = substring.size - 1
       l, r = 0, @suffixes.size - 1
       until l > r
-        mid = (l + r) / 2
+        mid = (l + r) // 2
         suffix = @suffixes[mid][0..substring_length]
         case Math.max(-1, Math.min(1, substring <=> suffix)) # bound <=> to -1, 0, 1
         when 0
