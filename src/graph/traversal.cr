@@ -135,7 +135,7 @@ module Crystalline::Graph
 
     def initialize(@graph : Graph(T, Edge), start = @graph.find { |x| true })
       @waiting = [] of T
-      @dist_map = Hash(T, T).new(0)
+      @dist_map = Hash(T, T).new()
       @color_map = Hash(T, Mark).new(Mark::WHITE)
       @start_vertex = start
       set_to_begin
